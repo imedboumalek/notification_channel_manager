@@ -13,25 +13,18 @@ class FlutterNotificationChannelManager(
     @SuppressLint("NewApi")
     fun handleCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "getNotificationChannel" -> {
-                notificationManager.getNotificationChannel(call.argument<String>("channelId"))
-                    ?.let {
-                        result.success(it)
-                    } ?: result.error("NOT_FOUND", "Notification channel not found", null,)
-
-            }
-            "createNotificationChannel" -> {
-
-                result.success(null)
-            }
             "deleteNotificationChannel" -> {
-
+                val id: String = call.argument<String>("id")!!
+                notificationManager.deleteNotificationChannel(id)
                 result.success(null)
             }
             "deleteNotificationChannels" -> {
+                val ids: List<String> = call.argument<List<String>>("ids")!!
+                ids.forEach {
+                    notificationManager.deleteNotificationChannel(it)
+                }
                 result.success(null)
             }
-
             else -> result.notImplemented()
         }
 
