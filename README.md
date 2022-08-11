@@ -25,7 +25,7 @@ A Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGr
 ## ROADMAP
 
 - Dart:
-  - [ ] Define classes for NotificationChannel and NotificationChannelGroup
+  - [x] Define classes for NotificationChannel and NotificationChannelGroup
   - [ ] Define a NotificationChannelManager class
   - [ ] Define interfaces for NotificationChannelManager to use with the Native API
 - Android:
