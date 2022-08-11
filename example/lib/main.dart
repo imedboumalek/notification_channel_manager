@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:notification_channel_manager/notification_channel_manager.dart';
 
 void main() {
   runApp(const MyApp());
