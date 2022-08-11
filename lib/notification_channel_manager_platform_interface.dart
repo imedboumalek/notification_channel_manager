@@ -1,3 +1,5 @@
+import 'package:notification_channel_manager/src/notification_channel.dart';
+import 'package:notification_channel_manager/src/notification_channel_group.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'notification_channel_manager_method_channel.dart';
@@ -14,7 +16,7 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
   ///
   /// Defaults to [MethodChannelNotificationChannelManager].
   static NotificationChannelManagerPlatform get instance => _instance;
-  
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [NotificationChannelManagerPlatform] when
   /// they register themselves.
@@ -23,7 +25,15 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  Future<bool> initialize() {
+    throw UnimplementedError("initialize() has not been implemented.");
+  }
+
+  Future<List<NotificationChannel>> getNotificationChannels() {
+    throw UnimplementedError('getNotificationChannels() has not been implemented.');
+  }
+
+  Future<List<NotificationChannelGroup>> getNotificationChannelGroups() {
+    throw UnimplementedError('getNotificationChannelGroups() has not been implemented.');
   }
 }
