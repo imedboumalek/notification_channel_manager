@@ -25,15 +25,44 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<bool> initialize() {
-    throw UnimplementedError("initialize() has not been implemented.");
-  }
-
-  Future<List<NotificationChannel>> getNotificationChannels() {
+  Future<List<NotificationChannel>> getAllChannels() {
     throw UnimplementedError('getNotificationChannels() has not been implemented.');
   }
 
-  Future<List<NotificationChannelGroup>> getNotificationChannelGroups() {
+  Future<List<NotificationChannelGroup>> getAllChannelGroups() {
     throw UnimplementedError('getNotificationChannelGroups() has not been implemented.');
+  }
+
+  Future<NotificationChannel> getChannelById(String channelId) {
+    throw UnimplementedError('getNotificationChannel() has not been implemented.');
+  }
+
+  Future<List<NotificationChannel>> getMultiChannelsByIds(List<String> channelIds) {
+    throw UnimplementedError('getMultiNotificationChannels() has not been implemented.');
+  }
+
+  Future<NotificationChannel> upsertNotificationChannel(NotificationChannel notificationChannel) {
+    throw UnimplementedError('upsertNotificationChannel() has not been implemented.');
+  }
+
+  Future<NotificationChannelGroup> upsertNotificationChannelGroup(
+      NotificationChannelGroup notificationChannelGroup) {
+    throw UnimplementedError('upsertNotificationChannelGroup() has not been implemented.');
+  }
+
+  Future<void> deleteChannel(String channelId) {
+    throw UnimplementedError('deleteChannel() has not been implemented.');
+  }
+
+  Future<void> deleteMutliChannels(List<String> channelIds) {
+    throw UnimplementedError('deleteChannels() has not been implemented.');
+  }
+
+  Future<void> deleteChannelGroup(String channelGroupId) {
+    throw UnimplementedError('deleteChannelGroup() has not been implemented.');
+  }
+
+  Future<void> deleteMultiChannelGroups(List<String> channelGroupIds) {
+    throw UnimplementedError('deleteChannelGroups() has not been implemented.');
   }
 }
