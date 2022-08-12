@@ -21,10 +21,20 @@ class NotificationChannel {
       name: json['name'] as String,
       description: json['description'] as String,
       importance: NotificationChannelImportance.values.firstWhere(
-        (e) => e.toString() == 'NotificationChannelImportance.${json['importance']}',
+        (e) => e.nativeValue() == json['importance'] as int,
         orElse: () => NotificationChannelImportance.defaultImportance,
       ),
       groupId: json['groupId'] as String?,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'importance': importance.nativeValue(),
+      'groupId': groupId,
+    };
   }
 }

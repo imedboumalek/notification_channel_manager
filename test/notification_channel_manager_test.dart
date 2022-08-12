@@ -10,20 +10,63 @@ class MockNotificationChannelManagerPlatform
     with MockPlatformInterfaceMixin
     implements NotificationChannelManagerPlatform {
   @override
-  Future<List<NotificationChannelGroup>> getNotificationChannelGroups() {
-    // TODO: implement getNotificationChannelGroups
+  Future<void> deleteChannel(String channelId) {
+    // TODO: implement deleteChannel
     throw UnimplementedError();
   }
 
   @override
-  Future<List<NotificationChannel>> getNotificationChannels() {
-    // TODO: implement getNotificationChannels
+  Future<void> deleteChannelGroup(String channelGroupId) {
+    // TODO: implement deleteChannelGroup
     throw UnimplementedError();
   }
 
   @override
-  Future<bool> initialize() {
-    // TODO: implement initialize
+  Future<void> deleteMultiChannelGroups(List<String> channelGroupIds) {
+    // TODO: implement deleteMultiChannelGroups
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteMutliChannels(List<String> channelIds) {
+    // TODO: implement deleteMutliChannels
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<NotificationChannelGroup>> getAllChannelGroups() {
+    // TODO: implement getAllChannelGroups
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<NotificationChannel>> getAllChannels() {
+    // TODO: implement getAllChannels
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<NotificationChannel> getChannelById(String channelId) {
+    // TODO: implement getChannelById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<NotificationChannel>> getMultiChannelsByIds(List<String> channelIds) {
+    // TODO: implement getMultiChannelsByIds
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<NotificationChannel> upsertNotificationChannel(NotificationChannel notificationChannel) {
+    // TODO: implement upsertNotificationChannel
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<NotificationChannelGroup> upsertNotificationChannelGroup(
+      NotificationChannelGroup notificationChannelGroup) {
+    // TODO: implement upsertNotificationChannelGroup
     throw UnimplementedError();
   }
 }

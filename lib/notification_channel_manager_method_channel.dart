@@ -12,8 +12,28 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   final methodChannel = const MethodChannel('notification_channel_manager');
 
   @override
-  Future<List<NotificationChannelGroup>> getNotificationChannelGroups() {
-    return methodChannel.invokeMethod('getNotificationChannelGroups').then((result) {
+  Future<void> deleteChannel(String channelId) {
+    return methodChannel.invokeMethod('deleteChannel', channelId);
+  }
+
+  @override
+  Future<void> deleteChannelGroup(String channelGroupId) {
+    return methodChannel.invokeMethod('deleteChannelGroup', channelGroupId);
+  }
+
+  @override
+  Future<void> deleteMultiChannelGroups(List<String> channelGroupIds) {
+    return methodChannel.invokeMethod('deleteMultiChannelGroups', channelGroupIds);
+  }
+
+  @override
+  Future<void> deleteMutliChannels(List<String> channelIds) {
+    return methodChannel.invokeMethod('deleteMultiChannels', channelIds);
+  }
+
+  @override
+  Future<List<NotificationChannelGroup>> getAllChannelGroups() {
+    return methodChannel.invokeMethod('getAllChannelGroups').then((result) {
       return result
           .map<NotificationChannelGroup>((json) => NotificationChannelGroup.fromJson(json))
           .toList();
@@ -21,14 +41,43 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<List<NotificationChannel>> getNotificationChannels() {
-    return methodChannel.invokeMethod('getNotificationChannels').then((result) {
+  Future<List<NotificationChannel>> getAllChannels() {
+    return methodChannel.invokeMethod('getAllChannels').then((result) {
       return result.map<NotificationChannel>((json) => NotificationChannel.fromJson(json)).toList();
     });
   }
 
   @override
-  Future<bool> initialize() {
-    return methodChannel.invokeMethod('initialize') as Future<bool>;
+  Future<NotificationChannel> getChannelById(String channelId) {
+    return methodChannel.invokeMethod('getChannelById', channelId).then((result) {
+      return NotificationChannel.fromJson(result);
+    });
+  }
+
+  @override
+  Future<List<NotificationChannel>> getMultiChannelsByIds(List<String> channelIds) {
+    return methodChannel.invokeMethod('getMultiChannelsByIds', channelIds).then((result) {
+      return result.map<NotificationChannel>((json) => NotificationChannel.fromJson(json)).toList();
+    });
+  }
+
+  @override
+  Future<NotificationChannel> upsertNotificationChannel(NotificationChannel notificationChannel) {
+    return methodChannel
+        .invokeMethod('upsertNotificationChannel', notificationChannel.toJson())
+        .then((result) {
+      return NotificationChannel.fromJson(result);
+    });
+  }
+
+  @override
+  Future<NotificationChannelGroup> upsertNotificationChannelGroup(
+    NotificationChannelGroup notificationChannelGroup,
+  ) {
+    return methodChannel
+        .invokeMethod('upsertNotificationChannelGroup', notificationChannelGroup.toJson())
+        .then((result) {
+      return NotificationChannelGroup.fromJson(result);
+    });
   }
 }

@@ -32,4 +32,13 @@ class NotificationChannelGroup {
           .toList(),
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'isBlocked': isBlocked,
+      'channels': channels.map((e) => e.toJson()).toList(),
+    };
+  }
 }
