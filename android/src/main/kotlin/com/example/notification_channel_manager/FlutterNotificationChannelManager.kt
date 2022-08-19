@@ -16,23 +16,50 @@ class FlutterNotificationChannelManager(
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) result.success(null)
 
         when (call.method) {
-            "getNotificationChannels" -> {
+            // channels
+            "getChannels" -> {
                 result.success(getNotificationChannels())
             }
-            "createNotificationChannel" -> {
+            "getChannel" -> {
+                val channelId = call.argument as String
+                result.success(getNotificationChannelById(channelId))
+            }
+            "createChannel" -> {
                 val args = call.arguments as Map<String, Any>
                 var nc = notificationChannelFromMap(args)
                 notificationManager.createNotificationChannel(nc)
                 nc = getNotificationChannel(nc.id)
                 result.success(nc.toMap())
             }
-            "createNotificationChannels" -> {
+            "createChannels" -> {
                 val args = call.arguments as List<Map<String, Any>>
                 val ncs = args.map { notificationChannelFromMap(it) }
                 notificationManager.createNotificationChannels(ncs)
                 result.success(getNotificationChannels())
             }
-            "createNotificationChannelGroup" -> {
+
+            "deleteChannel" -> {
+                val id: String = call.argument<String>("id")!!
+                notificationManager.deleteNotificationChannel(id)
+                result.success(null)
+            }
+            "deleteChannels" -> {
+                
+                    val ids: List<String> = call.argument<List<String>>("ids")!!
+                    ids.forEach {
+                        notificationManager.deleteNotificationChannel(it)
+                    }
+                    result.success(null)
+               
+            }
+            "getGroups" -> {
+                // TODO
+            }
+            "getGroup" -> {
+                // TODO
+            }
+            // Groups
+            "createGroup" -> {
                 val args = call.arguments as Map<String, Any>
                 var ncg = notificationChannelGroupFromMap(args)
                 notificationManager.createNotificationChannelGroup(ncg)
@@ -40,48 +67,26 @@ class FlutterNotificationChannelManager(
                 result.success(ncg.toMap())
 
             }
-            "createNotificationChannelGroups" -> {
+            "createGroups" -> {
                 val args = call.arguments as List<Map<String, Any>>
                 var ncgs = args.map { notificationChannelGroupFromMap(it) }
                 notificationManager.createNotificationChannelGroups(ncgs)
                 ncgs = notificationManager.notificationChannelGroups
-                
                 result.success(ncgs.map { it.toMap() })
             }
-            "deleteChannel" -> {
-                val id: String = call.argument<String>("id")!!
-                notificationManager.deleteNotificationChannel(id)
-                result.success(null)
-            }
-            "deleteMultiChannels" -> {
-                try {
-                    val ids: List<String> = call.argument<List<String>>("ids")!!
-                    ids.forEach {
-                        notificationManager.deleteNotificationChannel(it)
-                    }
-                    result.success(null)
-                } catch (e: Exception) {
-                    result.error("deleteNotificationChannels", e.message, e.stackTrace)
-
-                }
-            }
-            "deleteChannelGroup" -> {
+            "deleteGroup" -> {
                 val id: String = call.argument<String>("id")!!
                 notificationManager.deleteNotificationChannelGroup(id)
                 result.success(null)
             }
-            "deleteMultiChannelGroups" -> {
-                try {
-
+            "deleteGroups" -> {
+               
                     val ids: List<String> = call.argument<List<String>>("ids")!!
                     ids.forEach {
                         notificationManager.deleteNotificationChannelGroup(it)
                     }
                     result.success(null)
-                } catch (e: Exception) {
-                    result.error("deleteNotificationChannelGroups", e.message, e.stackTrace)
-
-                }
+               
             }
             else -> result.notImplemented()
         }

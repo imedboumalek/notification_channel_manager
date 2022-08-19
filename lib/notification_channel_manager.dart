@@ -5,43 +5,53 @@ import 'package:notification_channel_manager/src/notification_channel.dart';
 import 'notification_channel_manager_platform_interface.dart';
 
 class NotificationChannelManager {
-  Future<void> deleteChannel(String channelId) async {
+  static Future<void> deleteChannel(String channelId) {
     return NotificationChannelManagerPlatform.instance.deleteChannel(channelId);
   }
 
-  Future<void> deleteChannelGroup(String channelGroupId) {
-    return NotificationChannelManagerPlatform.instance.deleteChannelGroup(channelGroupId);
+  static Future<void> deleteGroup(String channelGroupId) {
+    return NotificationChannelManagerPlatform.instance.deleteGroup(channelGroupId);
   }
 
-  Future<void> deleteMultiChannelGroups(List<String> channelGroupIds) {
-    return NotificationChannelManagerPlatform.instance.deleteMultiChannelGroups(channelGroupIds);
+  static Future<void> deleteGroups(List<String> channelGroupIds) {
+    return NotificationChannelManagerPlatform.instance.deleteGroups(channelGroupIds);
   }
 
-  Future<void> deleteMutliChannels(List<String> channelIds) {
+  static Future<void> deleteMutliChannels(List<String> channelIds) {
     return NotificationChannelManagerPlatform.instance.deleteMutliChannels(channelIds);
   }
 
-  Future<List<NotificationChannelGroup>> getAllChannelGroups() {
-    return NotificationChannelManagerPlatform.instance.getAllChannelGroups();
-  }
-
-  Future<List<NotificationChannel>> getAllChannels() {
+  static Future<List<NotificationChannel>> getAllChannels() {
     return NotificationChannelManagerPlatform.instance.getAllChannels();
   }
 
-  Future<NotificationChannel> getChannelById(String channelId) {
-    return NotificationChannelManagerPlatform.instance.getChannelById(channelId);
+  static Future<List<NotificationChannelGroup>> getAllGroups() {
+    return NotificationChannelManagerPlatform.instance.getAllGroups();
   }
 
-  Future<List<NotificationChannel>> getMultiChannelsByIds(List<String> channelIds) {
-    return NotificationChannelManagerPlatform.instance.getMultiChannelsByIds(channelIds);
+  static Future<NotificationChannel> getChannel(String channelId) {
+    return NotificationChannelManagerPlatform.instance.getChannel(channelId);
   }
 
-  Future<NotificationChannel> upsertNotificationChannel(NotificationChannel channel) {
-    return NotificationChannelManagerPlatform.instance.upsertNotificationChannel(channel);
+  static Future<NotificationChannelGroup> getGroup(String groupId) {
+    return NotificationChannelManagerPlatform.instance.getGroup(groupId);
   }
 
-  Future<NotificationChannelGroup> upsertNotificationChannelGroup(NotificationChannelGroup group) {
-    return NotificationChannelManagerPlatform.instance.upsertNotificationChannelGroup(group);
+  static Future<NotificationChannel> upsertChannel(NotificationChannel notificationChannel) {
+    return NotificationChannelManagerPlatform.instance.upsertChannel(notificationChannel);
+  }
+
+  static Future<List<NotificationChannel>> upsertChannels(List<NotificationChannel> channels) {
+    return NotificationChannelManagerPlatform.instance.upsertChannels(channels);
+  }
+
+  static Future<NotificationChannelGroup> upsertGroup(
+      NotificationChannelGroup notificationChannelGroup) {
+    return NotificationChannelManagerPlatform.instance.upsertGroup(notificationChannelGroup);
+  }
+
+  static Future<List<NotificationChannelGroup>> upsertGroups(
+      List<NotificationChannelGroup> groups) {
+    return NotificationChannelManagerPlatform.instance.upsertGroups(groups);
   }
 }
