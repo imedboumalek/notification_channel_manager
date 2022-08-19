@@ -21,8 +21,9 @@ class FlutterNotificationChannelManager(
                 result.success(getNotificationChannels())
             }
             "getChannel" -> {
-                val channelId = call.argument as String
-                result.success(getNotificationChannelById(channelId))
+                val id = call.arguments as String
+                val ch = getNotificationChannel(id)
+                result.success(ch.toMap())
             }
             "createChannel" -> {
                 val args = call.arguments as Map<String, Any>
@@ -37,28 +38,30 @@ class FlutterNotificationChannelManager(
                 notificationManager.createNotificationChannels(ncs)
                 result.success(getNotificationChannels())
             }
-
             "deleteChannel" -> {
-                val id: String = call.argument<String>("id")!!
+                val id: String = call.arguments as String
                 notificationManager.deleteNotificationChannel(id)
                 result.success(null)
             }
             "deleteChannels" -> {
-                
-                    val ids: List<String> = call.argument<List<String>>("ids")!!
+
+                    val ids: List<String> = call.arguments as List<String>
                     ids.forEach {
                         notificationManager.deleteNotificationChannel(it)
                     }
                     result.success(null)
-               
-            }
-            "getGroups" -> {
-                // TODO
-            }
-            "getGroup" -> {
-                // TODO
+
             }
             // Groups
+            "getGroups" -> {
+                val groups = notificationManager.notificationChannelGroups
+                result.success(groups.map { it.toMap() })
+            }
+            "getGroup" -> {
+                val id = call.arguments as String
+                val group = notificationManager.getNotificationChannelGroup(id)
+                result.success(group.toMap())
+            }
             "createGroup" -> {
                 val args = call.arguments as Map<String, Any>
                 var ncg = notificationChannelGroupFromMap(args)
@@ -75,18 +78,18 @@ class FlutterNotificationChannelManager(
                 result.success(ncgs.map { it.toMap() })
             }
             "deleteGroup" -> {
-                val id: String = call.argument<String>("id")!!
+                val id: String = call.arguments as String
                 notificationManager.deleteNotificationChannelGroup(id)
                 result.success(null)
             }
             "deleteGroups" -> {
-               
-                    val ids: List<String> = call.argument<List<String>>("ids")!!
+
+                    val ids: List<String> = call.arguments as List<String>
                     ids.forEach {
                         notificationManager.deleteNotificationChannelGroup(it)
                     }
                     result.success(null)
-               
+
             }
             else -> result.notImplemented()
         }
