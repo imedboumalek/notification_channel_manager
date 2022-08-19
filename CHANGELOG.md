@@ -1,3 +1,7 @@
+## (0.0.3-dev+1)
+
+updated readme
+
 ## (0.0.3-dev+0)
 
 - implemented all features on native side

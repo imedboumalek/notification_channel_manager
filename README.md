@@ -35,10 +35,10 @@ A Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGr
   - Read notification channel group(s)
 - Dart:
   - [x] Define classes for NotificationChannel and NotificationChannelGroup
-  - [ ] Define a NotificationChannelManager class
-  - [ ] Define interfaces for NotificationChannelManager to use with the Native API
+  - [x] Define a NotificationChannelManager class
+  - [x] Define interfaces for NotificationChannelManager to use with the Native API
 - Android:
-  - [ ] Implement functionalities on Native API
+  - [x] Implement functionalities on Native API
 
 ## Contributing
 
