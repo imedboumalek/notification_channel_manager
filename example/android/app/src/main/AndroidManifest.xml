@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.notification_channel_manager_example">
+    package="dev.imed.notification_channel_manager_example">
    <application
         android:label="notification_channel_manager_example"
         android:name="${applicationName}"

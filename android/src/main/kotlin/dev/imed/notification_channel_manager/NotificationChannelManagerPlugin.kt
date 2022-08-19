@@ -1,4 +1,4 @@
-package com.example.notification_channel_manager
+package dev.imed.notification_channel_manager
 
 import android.app.NotificationManager
 import android.content.Context.NOTIFICATION_SERVICE

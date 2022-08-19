@@ -22,5 +22,5 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.notification_channel_manager
+        package: dev.imed.notification_channel_manager
         pluginClass: NotificationChannelManagerPlugin
