@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  custom_floating_action_button:
+    dependency: "direct main"
+    description:
+      name: custom_floating_action_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   fake_async:
     dependency: transitive
     description:

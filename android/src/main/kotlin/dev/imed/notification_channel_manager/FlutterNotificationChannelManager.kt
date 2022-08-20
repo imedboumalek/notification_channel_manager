@@ -26,14 +26,14 @@ class FlutterNotificationChannelManager(
                 result.success(ch.toMap())
             }
             "createChannel" -> {
-                val args = call.arguments as Map<String, Any>
+                val args = call.arguments as Map<String, Any?>
                 var nc = notificationChannelFromMap(args)
                 notificationManager.createNotificationChannel(nc)
                 nc = getNotificationChannel(nc.id)
                 result.success(nc.toMap())
             }
             "createChannels" -> {
-                val args = call.arguments as List<Map<String, Any>>
+                val args = call.arguments as List<Map<String, Any?>>
                 val ncs = args.map { notificationChannelFromMap(it) }
                 notificationManager.createNotificationChannels(ncs)
                 result.success(getNotificationChannels())
@@ -100,12 +100,12 @@ class FlutterNotificationChannelManager(
         return notificationManager.getNotificationChannel(id)
     }
 
-    private fun getNotificationChannels(): Map<String, Any> {
+    private fun getNotificationChannels(): List<Map<String,Any?>> {
         val channels = notificationManager.notificationChannels
-        val map = HashMap<String, Any>()
+        val list= ArrayList<Map<String,Any?>>()
         channels.forEach {
-            map[it.id] = it.toMap()
+            list.add(it.toMap())
         }
-        return map
+        return list
     }
 }

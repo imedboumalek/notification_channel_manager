@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:notification_channel_manager/src/notification_channel_importance.dart';
+import 'package:notification_channel_manager/notification_channel_manager.dart';
 
 void main() {
   test(
