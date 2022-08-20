@@ -39,9 +39,9 @@ A Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGr
   - [x] Define interfaces for NotificationChannelManager to use with the Native API
 - Android:
   - [x] Implement functionalities on Native API
+- [ ] Add tests
 - [ ] Setup example app
 - [ ] Write documentation
-- [ ] Add tests
 
 ## Contributing
 

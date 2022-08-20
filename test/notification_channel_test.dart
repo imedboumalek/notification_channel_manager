@@ -14,6 +14,14 @@ void main() {
       expect(channel.name, "name");
       expect(channel.description, "description");
       expect(channel.importance, NotificationChannelImportance.high);
+      expect(channel.groupId, null);
+      expect(channel.canBypassDnd, null);
+      expect(channel.canShowBadge, null);
+      expect(channel.shouldShowLights, null);
+      expect(channel.shouldVibrate, null);
+      expect(channel.lightColor, null);
+      expect(channel.sound, null);
+      expect(channel.vibrationPattern, null);
     });
   });
 }
