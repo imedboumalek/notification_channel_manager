@@ -3,8 +3,11 @@ import 'package:notification_channel_manager/src/notification_channel_group.dart
 import 'package:notification_channel_manager/src/notification_channel.dart';
 
 import 'notification_channel_manager_platform_interface.dart';
+export 'src/notification_channel_group.dart';
+export 'src/notification_channel.dart';
 
 class NotificationChannelManager {
+  NotificationChannelManager._();
   static Future<void> deleteChannel(String channelId) {
     return NotificationChannelManagerPlatform.instance.deleteChannel(channelId);
   }
