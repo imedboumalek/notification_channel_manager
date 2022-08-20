@@ -22,6 +22,7 @@ import android.net.Uri
         "lightColor" to lightColor,
         "sound" to sound.toString(),
         "vibrationPattern" to vibrationPattern,
+        "isBlockable" to isBlockable(),
     )
 }
 @SuppressLint("NewApi")
@@ -58,7 +59,9 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
     if(map["vibrationPattern"] != null) {
         channel.vibrationPattern = map["vibrationPattern"] as LongArray
     }
-    
+    if(map["isBlockable"] != null) {
+        channel.isBlockable= map["isBlockable"] as Boolean
+    }
     return channel
 }
 
