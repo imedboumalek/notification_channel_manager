@@ -1,3 +1,8 @@
+## (0.0.4-dev+0)
+
+- added more fields to NotificationChannel Dart class
+- bug fixes
+
 ## (0.0.3-dev+1)
 
 updated readme
