@@ -17,12 +17,11 @@ import android.net.Uri
         "groupId" to group,
         "canBypassDnd" to canBypassDnd(),
         "canShowBadge" to canShowBadge(),
-        "enableLights" to shouldShowLights(),
+        "shouldShowLights" to shouldShowLights(),
         "shouldVibrate" to shouldVibrate(),
         "lightColor" to lightColor,
         "sound" to sound.toString(),
         "vibrationPattern" to vibrationPattern,
-        "enableBadge" to canShowBadge(),
     )
 }
 @SuppressLint("NewApi")
@@ -44,8 +43,8 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
     if(map["canShowBadge"] != null) {
         channel.setShowBadge(  map["canShowBadge"] as Boolean)
     }
-    if(map["enableLights"] != null) {
-        channel.enableLights(  map["enableLights"] as Boolean)
+    if(map["shouldShowLights"] != null) {
+        channel.enableLights(  map["shouldShowLights"] as Boolean)
     }
     if(map["shouldVibrate"] != null) {
         channel.enableVibration(  map["shouldVibrate"] as Boolean)
@@ -59,9 +58,7 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
     if(map["vibrationPattern"] != null) {
         channel.vibrationPattern = map["vibrationPattern"] as LongArray
     }
-    if(map["enableBadge"] != null) {
-        channel.setShowBadge(  map["enableBadge"] as Boolean)
-    }
+    
     return channel
 }
 

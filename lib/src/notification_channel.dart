@@ -11,13 +11,11 @@ class NotificationChannel {
   final String? groupId;
   final bool? canBypassDnd;
   final bool? canShowBadge;
-  final bool? canShowLights;
-  final bool? enableLights;
+  final bool? shouldShowLights;
   final bool? shouldVibrate;
   final LightColor? lightColor;
   final Uri? sound;
   final Uint64List? vibrationPattern;
-  final bool? showBadge;
 
   NotificationChannel({
     required this.id,
@@ -27,13 +25,11 @@ class NotificationChannel {
     this.groupId,
     this.canBypassDnd,
     this.canShowBadge,
-    this.canShowLights,
-    this.enableLights,
+    this.shouldShowLights,
     this.shouldVibrate,
     this.lightColor,
     this.sound,
     this.vibrationPattern,
-    this.showBadge,
   });
 
   factory NotificationChannel.fromJson(Map<String, dynamic> json) {
@@ -48,17 +44,15 @@ class NotificationChannel {
       groupId: json['groupId'] as String?,
       canBypassDnd: json['canBypassDnd'] as bool,
       canShowBadge: json['canShowBadge'] as bool,
-      canShowLights: json['canShowLights'] as bool,
-      enableLights: json['enableLights'] as bool,
+      shouldShowLights: json['shouldShowLights'] as bool,
       shouldVibrate: json['shouldVibrate'] as bool,
-      lightColor: json["shouldVibrate"]
+      lightColor: json["shouldShowLights"]
           ? LightColor.values.firstWhere(
               (e) => e.nativeValue() == json['lightColor'] as int,
             )
           : null,
       sound: Uri.parse(json['sound'] as String),
       vibrationPattern: json['vibrationPattern'] as Uint64List?,
-      showBadge: json['showBadge'] as bool,
     );
   }
 
@@ -71,13 +65,11 @@ class NotificationChannel {
       'groupId': groupId,
       'canBypassDnd': canBypassDnd,
       'canShowBadge': canShowBadge,
-      'canShowLights': canShowLights,
-      'enableLights': enableLights,
+      'shouldShowLights': shouldShowLights,
       'shouldVibrate': shouldVibrate,
       'lightColor': lightColor?.nativeValue(),
       'sound': sound?.toString(),
       'vibrationPattern': vibrationPattern,
-      'showBadge': showBadge,
     };
   }
 }
