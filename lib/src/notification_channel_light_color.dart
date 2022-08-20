@@ -1,3 +1,5 @@
+part of "notification_channel.dart";
+
 enum LightColor {
   black,
   dkGray,

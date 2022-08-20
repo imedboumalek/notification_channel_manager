@@ -1,3 +1,5 @@
+part of "notification_channel.dart";
+
 enum NotificationChannelImportance {
   /// Value signifying that the user has not expressed an importance.
   /// This value is for persisting preferences,

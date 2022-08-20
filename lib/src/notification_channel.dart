@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'notification_channel_importance.dart';
-import 'notification_channel_light_color.dart';
+part 'notification_channel_importance.dart';
+part 'notification_channel_light_color.dart';
 
 class NotificationChannel {
   final String id;
