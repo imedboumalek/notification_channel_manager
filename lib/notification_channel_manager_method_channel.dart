@@ -26,10 +26,13 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannel> upsertChannel(NotificationChannel notificationChannel) {
-    return methodChannel.invokeMethod('createChannel', notificationChannel.toJson()).then((result) {
-      return NotificationChannel.fromJson(result);
-    });
+  Future<NotificationChannel> upsertChannel(NotificationChannel notificationChannel) async {
+    var result = await methodChannel.invokeMethod<Map>(
+      'createChannel',
+      notificationChannel.toJson(),
+    );
+    result = Map<String, dynamic>.from(result!);
+    return NotificationChannel.fromJson(result as Map<String, dynamic>);
   }
 
   @override

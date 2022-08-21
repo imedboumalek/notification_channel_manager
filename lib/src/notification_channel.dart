@@ -9,7 +9,6 @@ class NotificationChannel {
   final String description;
   final NotificationChannelImportance importance;
   final String? groupId;
-  final bool? canBypassDnd;
   final bool? canShowBadge;
   final bool? shouldShowLights;
   final bool? shouldVibrate;
@@ -23,7 +22,6 @@ class NotificationChannel {
     required this.description,
     required this.importance,
     this.groupId,
-    this.canBypassDnd,
     this.canShowBadge,
     this.shouldShowLights,
     this.shouldVibrate,
@@ -42,7 +40,6 @@ class NotificationChannel {
         orElse: () => NotificationChannelImportance.defaultImportance,
       ),
       groupId: json['groupId'] as String?,
-      canBypassDnd: json['canBypassDnd'] as bool,
       canShowBadge: json['canShowBadge'] as bool,
       shouldShowLights: json['shouldShowLights'] as bool,
       shouldVibrate: json['shouldVibrate'] as bool,
@@ -63,7 +60,6 @@ class NotificationChannel {
       'description': description,
       'importance': importance.nativeValue(),
       'groupId': groupId,
-      'canBypassDnd': canBypassDnd,
       'canShowBadge': canShowBadge,
       'shouldShowLights': shouldShowLights,
       'shouldVibrate': shouldVibrate,
