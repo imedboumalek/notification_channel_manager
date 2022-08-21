@@ -1,6 +1,5 @@
 import 'package:custom_floating_action_button/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
-import 'package:notification_channel_manager/notification_channel_manager.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,29 +17,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    NotificationChannelManager.upsertChannels([
-      NotificationChannel(
-        id: 'channel1',
-        name: 'Channel 1',
-        description: 'Channel 1 description',
-        importance: NotificationChannelImportance.high,
-      ),
-      NotificationChannel(
-        id: 'channel2',
-        name: 'Channel 2',
-        description: 'Channel 2 description',
-        importance: NotificationChannelImportance.high,
-      ),
-      NotificationChannel(
-        id: 'channel3',
-        name: 'Channel 3',
-        description: 'Channel 3 description',
-        importance: NotificationChannelImportance.high,
-      ),
-    ]).then((channels) {
-      print("success");
-      print(channels);
-    });
   }
 
   @override

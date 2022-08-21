@@ -17,8 +17,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  notification_channel_manager_example:
-    path: example
+  # notification_channel_manager_example:
+  #   path: example
   integration_test:
     sdk: flutter
 
