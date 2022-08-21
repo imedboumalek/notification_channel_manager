@@ -49,7 +49,9 @@ class NotificationChannel {
             )
           : null,
       sound: Uri.parse(json['sound'] as String),
-      vibrationPattern: json['vibrationPattern'] as Uint64List?,
+      vibrationPattern: json['vibrationPattern'] == null
+          ? null
+          : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),
     );
   }
 
@@ -65,7 +67,7 @@ class NotificationChannel {
       'shouldVibrate': shouldVibrate,
       'lightColor': lightColor?.nativeValue(),
       'sound': sound?.toString(),
-      'vibrationPattern': vibrationPattern,
+      'vibrationPattern': vibrationPattern?.toList(),
     };
   }
 }

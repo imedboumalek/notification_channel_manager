@@ -22,7 +22,7 @@ fun NotificationChannel.toMap(): Map<String, Any?> {
         "shouldVibrate" to shouldVibrate(),
         "lightColor" to lightColor,
         "sound" to sound.toString(),
-        "vibrationPattern" to vibrationPattern,
+        "vibrationPattern" to vibrationPattern?.toList(),
 
         )
 }
