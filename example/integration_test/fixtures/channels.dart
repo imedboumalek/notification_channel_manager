@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:notification_channel_manager/notification_channel_manager.dart';
 
-final channelsWithRequiredFieldsOnly = [
+const channelsWithRequiredFieldsOnly = [
   NotificationChannel(
     id: 'channel1',
     name: 'Channel 1',
@@ -34,10 +34,10 @@ final channelsWithAllFields = [
     shouldShowLights: true,
     shouldVibrate: true,
     // lightColor: LightColor.red,
-    sound: Uri.parse('android.resource://com.example.app/raw/notification'),
+    sound: NotificationSoundUri.parse('android.resource://com.example.app/raw/notification'),
     vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
   ),
-  NotificationChannel(
+  const NotificationChannel(
     id: 'channel2',
     name: 'Channel 2',
     description: 'Channel 2 description',
@@ -57,7 +57,7 @@ final channelsWithAllFields = [
     shouldShowLights: true,
     shouldVibrate: true,
     // lightColor: LightColor.red,
-    sound: Uri.parse('android.resource://com.example.app/raw/notification'),
+    sound: NotificationSoundUri.parse('android.resource://com.example.app/raw/notification'),
     vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
   )
 ];

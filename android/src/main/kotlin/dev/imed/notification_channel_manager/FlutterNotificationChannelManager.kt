@@ -23,13 +23,13 @@ class FlutterNotificationChannelManager(
             "getChannel" -> {
                 val id = call.arguments as String
                 val ch = getNotificationChannel(id)
-                result.success(ch.toMap())
+                result.success(ch?.toMap())
             }
             "createChannel" -> {
                 val args = call.arguments as Map<String, Any?>
                 var nc = notificationChannelFromMap(args)
                 notificationManager.createNotificationChannel(nc)
-                nc = getNotificationChannel(nc.id)
+                nc = getNotificationChannel(nc.id)!!
                 result.success(nc.toMap())
             }
             "createChannels" -> {
@@ -96,8 +96,14 @@ class FlutterNotificationChannelManager(
 
     }
 
-    private fun getNotificationChannel(id: String?): NotificationChannel {
+    private fun getNotificationChannel(id: String): NotificationChannel? {
+        try {
+
         return notificationManager.getNotificationChannel(id)
+        }
+        catch (e: Exception) {
+            return null
+        }
     }
 
     private fun getNotificationChannels(): List<Map<String,Any?>> {

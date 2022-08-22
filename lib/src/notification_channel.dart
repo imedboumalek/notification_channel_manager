@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
+part 'notification_sound.dart';
+
 part 'notification_channel_importance.dart';
 part 'notification_channel_light_color.dart';
 
@@ -17,7 +19,7 @@ class NotificationChannel extends Equatable {
   final bool? shouldShowLights;
   final bool? shouldVibrate;
   // final LightColor? lightColor;
-  final Uri? sound;
+  final NotificationSoundUri? sound;
   final Uint64List? vibrationPattern;
 
   const NotificationChannel({
@@ -53,7 +55,7 @@ class NotificationChannel extends Equatable {
       //         orElse: () => LightColor.transparent,
       //       )
       //     : null,
-      sound: Uri.parse(json['sound'] as String),
+      sound: NotificationSoundUri.parse(json['sound'] as String),
       vibrationPattern: json['vibrationPattern'] == null
           ? null
           : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),

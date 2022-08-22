@@ -10,7 +10,7 @@ void main() {
 
   group("Notification channels", () {
     app.main();
-    final channel1 = NotificationChannel(
+    const channel1 = NotificationChannel(
       id: "id",
       name: "name",
       description: "description",
@@ -27,12 +27,12 @@ void main() {
       shouldShowLights: true,
       shouldVibrate: true,
       // lightColor: LightColor.red,
-      sound: Uri.parse("android.resource://com.example.app/raw/notification"),
+      sound: RawNotificationSound(fileName: "sound.mp3", packageName: "dev.imed.example"),
+
       vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
     );
     final results = <NotificationChannel>[];
-    testWidgets("given just the required fields, should create successfully",
-        (WidgetTester tester) async {
+    testWidgets("given just the required fields, should create successfully", (_) async {
       final result = await NotificationChannelManager.upsertChannel(channel1);
       expect(result.id, "id");
       expect(result.name, "name");
@@ -43,29 +43,32 @@ void main() {
       expect(result.shouldShowLights, false);
       expect(result.shouldVibrate, false);
       // expect(result.lightColor, null);
-      expect(result.sound, Uri.parse("content://settings/system/notification_sound"),
+      expect(result.sound, isA<NotificationSoundUri>());
+      expect(result.sound.toString(), "content://settings/system/notification_sound",
           reason: "Default android notification sound");
       expect(result.vibrationPattern, null);
       results.add(result);
     });
 
     testWidgets("given all fields, should create successfully, and should match the fields",
-        (WidgetTester tester) async {
+        (_) async {
       final result = await NotificationChannelManager.upsertChannel(channel2);
       expect(result, channel2);
+      expect(result.sound, isA<RawNotificationSound>());
       results.add(result);
     });
-    testWidgets("should read notification channel", (WidgetTester tester) async {
+    testWidgets("should read notification channel", (_) async {
       var result = await NotificationChannelManager.getChannel(channel1.id);
       expect(result, results.first);
       result = await NotificationChannelManager.getChannel(channel2.id);
       expect(result, channel2);
     });
-    testWidgets("should read all notification channels", (WidgetTester tester) async {
+    testWidgets("should read all notification channels", (_) async {
       final result = await NotificationChannelManager.getAllChannels();
       expect(result, results);
     });
-    testWidgets("should delete notification channel", (WidgetTester tester) async {
+
+    testWidgets("should delete notification channel", (_) async {
       await NotificationChannelManager.deleteChannel(channel1.id);
       var result = await NotificationChannelManager.getChannel(channel1.id);
       expect(result, null);
@@ -73,8 +76,7 @@ void main() {
       result = await NotificationChannelManager.getChannel(channel2.id);
       expect(result, null);
     });
-    testWidgets("should return an empty list when there are no channels",
-        (WidgetTester tester) async {
+    testWidgets("should return an empty list when there are no channels", (_) async {
       final result = await NotificationChannelManager.getAllChannels();
       expect(result, isEmpty);
     });
