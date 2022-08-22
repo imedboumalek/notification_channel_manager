@@ -40,12 +40,20 @@ class NotificationChannelManager {
     return NotificationChannelManagerPlatform.instance.getGroup(groupId);
   }
 
-  static Future<NotificationChannel> upsertChannel(NotificationChannel notificationChannel) {
-    return NotificationChannelManagerPlatform.instance.upsertChannel(notificationChannel);
+  static Future<NotificationChannel> createChannel(NotificationChannel notificationChannel) {
+    return NotificationChannelManagerPlatform.instance.createChannel(notificationChannel);
   }
 
-  static Future<List<NotificationChannel>> upsertChannels(List<NotificationChannel> channels) {
-    return NotificationChannelManagerPlatform.instance.upsertChannels(channels);
+  static Future<List<NotificationChannel>> createChannels(List<NotificationChannel> channels) {
+    return NotificationChannelManagerPlatform.instance.createChannels(channels);
+  }
+
+  static Future<NotificationChannel> updateChannel(NotificationChannelUpdate update) {
+    return NotificationChannelManagerPlatform.instance.updateChannel(update);
+  }
+
+  static Future<List<NotificationChannel>> updateChannels(List<NotificationChannelUpdate> updates) {
+    return NotificationChannelManagerPlatform.instance.updateChannels(updates);
   }
 
   static Future<NotificationChannelGroup> upsertGroup(

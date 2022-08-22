@@ -33,7 +33,7 @@ void main() {
     );
     final results = <NotificationChannel>[];
     testWidgets("given just the required fields, should create successfully", (_) async {
-      final result = await NotificationChannelManager.upsertChannel(channel1);
+      final result = await NotificationChannelManager.createChannel(channel1);
       expect(result.id, "id");
       expect(result.name, "name");
       expect(result.description, "description");
@@ -52,7 +52,7 @@ void main() {
 
     testWidgets("given all fields, should create successfully, and should match the fields",
         (_) async {
-      final result = await NotificationChannelManager.upsertChannel(channel2);
+      final result = await NotificationChannelManager.createChannel(channel2);
       expect(result, channel2);
       expect(result.sound, isA<RawNotificationSound>());
       results.add(result);

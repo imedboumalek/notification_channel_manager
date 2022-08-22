@@ -33,11 +33,19 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     throw UnimplementedError('getNotificationChannel() has not been implemented.');
   }
 
-  Future<NotificationChannel> upsertChannel(NotificationChannel notificationChannel) {
+  Future<NotificationChannel> createChannel(NotificationChannel notificationChannel) {
     throw UnimplementedError('upsertNotificationChannel() has not been implemented.');
   }
 
-  Future<List<NotificationChannel>> upsertChannels(List<NotificationChannel> channels) {
+  Future<List<NotificationChannel>> createChannels(List<NotificationChannel> channels) {
+    throw UnimplementedError('upsertChannels has not been implemented.');
+  }
+
+  Future<NotificationChannel> updateChannel(NotificationChannelUpdate update) {
+    throw UnimplementedError('upsertNotificationChannel() has not been implemented.');
+  }
+
+  Future<List<NotificationChannel>> updateChannels(List<NotificationChannelUpdate> updates) {
     throw UnimplementedError('upsertChannels has not been implemented.');
   }
 

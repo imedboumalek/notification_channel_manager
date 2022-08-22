@@ -29,7 +29,7 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannel> upsertChannel(NotificationChannel notificationChannel) async {
+  Future<NotificationChannel> createChannel(NotificationChannel notificationChannel) async {
     var result = await methodChannel.invokeMethod<Map>(
       'createChannel',
       notificationChannel.toJson(),
@@ -39,10 +39,31 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<List<NotificationChannel>> upsertChannels(List<NotificationChannel> channels) async {
+  Future<List<NotificationChannel>> createChannels(List<NotificationChannel> channels) async {
     var result = await methodChannel.invokeMethod<List>(
           'createChannels',
           channels.map((channel) => channel.toJson()).toList(),
+        ) ??
+        [];
+    result = result.map((e) => Map<String, dynamic>.from(e)).toList();
+    return result.map((json) => NotificationChannel.fromJson(json)).toList();
+  }
+
+  @override
+  Future<NotificationChannel> updateChannel(NotificationChannelUpdate update) async {
+    var result = await methodChannel.invokeMethod<Map>(
+      'createChannel',
+      update.toJson(),
+    );
+    result = Map<String, dynamic>.from(result!);
+    return NotificationChannel.fromJson(result as Map<String, dynamic>);
+  }
+
+  @override
+  Future<List<NotificationChannel>> updateChannels(List<NotificationChannelUpdate> updates) async {
+    var result = await methodChannel.invokeMethod<List>(
+          'createChannels',
+          updates.map((channel) => channel.toJson()).toList(),
         ) ??
         [];
     result = result.map((e) => Map<String, dynamic>.from(e)).toList();

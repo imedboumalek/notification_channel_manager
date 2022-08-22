@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
@@ -8,6 +6,32 @@ part 'notification_sound.dart';
 
 part 'notification_channel_importance.dart';
 part 'notification_channel_light_color.dart';
+
+class NotificationChannelUpdate extends Equatable {
+  final String id;
+  final String name;
+  final String description;
+  final NotificationChannelImportance importance;
+
+  const NotificationChannelUpdate({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.importance,
+  });
+
+  @override
+  List<Object?> get props => [id, name, description, importance];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'importance': importance.nativeValue(),
+    };
+  }
+}
 
 class NotificationChannel extends Equatable {
   final String id;
@@ -61,7 +85,6 @@ class NotificationChannel extends Equatable {
           : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
