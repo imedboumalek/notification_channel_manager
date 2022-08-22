@@ -1,25 +1,20 @@
+import 'package:equatable/equatable.dart';
 import 'package:notification_channel_manager/src/notification_channel.dart';
 
-class NotificationChannelGroup {
+class NotificationChannelGroup extends Equatable {
   final String id;
   final String name;
   final String description;
-  late final List<NotificationChannel> _channels;
-  late final bool _isBlocked;
+  final List<NotificationChannel> channels;
+  final bool isBlocked;
 
-  NotificationChannelGroup({
+  const NotificationChannelGroup({
     required this.id,
     required this.name,
     required this.description,
-    required bool isBlocked,
-    required List<NotificationChannel> channels,
-  }) {
-    _isBlocked = isBlocked;
-    _channels = channels;
-  }
-  List<NotificationChannel> get channels => _channels;
-
-  bool get isBlocked => _isBlocked;
+    required this.isBlocked,
+    required this.channels,
+  });
 
   factory NotificationChannelGroup.fromJson(Map<String, dynamic> json) {
     return NotificationChannelGroup(
@@ -41,4 +36,7 @@ class NotificationChannelGroup {
       'channels': channels.map((e) => e.toJson()).toList(),
     };
   }
+
+  @override
+  List<Object> get props => [id, name, description, channels, isBlocked];
 }

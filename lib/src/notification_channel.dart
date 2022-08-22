@@ -1,10 +1,13 @@
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:equatable/equatable.dart';
 
 part 'notification_channel_importance.dart';
 part 'notification_channel_light_color.dart';
 
-class NotificationChannel {
+class NotificationChannel extends Equatable {
   final String id;
   final String name;
   final String description;
@@ -17,7 +20,7 @@ class NotificationChannel {
   final Uri? sound;
   final Uint64List? vibrationPattern;
 
-  NotificationChannel({
+  const NotificationChannel({
     required this.id,
     required this.name,
     required this.description,
@@ -72,4 +75,19 @@ class NotificationChannel {
       'vibrationPattern': vibrationPattern?.toList(),
     };
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        name,
+        description,
+        importance,
+        if (groupId != null) groupId!,
+        if (canShowBadge != null) canShowBadge!,
+        if (shouldShowLights != null) shouldShowLights!,
+        if (shouldVibrate != null) shouldVibrate!,
+        // if (lightColor != null) lightColor!,
+        if (sound != null) sound!,
+        if (vibrationPattern != null) vibrationPattern!,
+      ];
 }

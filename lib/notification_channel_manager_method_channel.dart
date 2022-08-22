@@ -12,10 +12,12 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   final methodChannel = const MethodChannel('notification_channel_manager');
 
   @override
-  Future<List<NotificationChannel>> getAllChannels() {
-    return methodChannel.invokeMethod('getChannels').then((result) {
-      return result.map<NotificationChannel>((json) => NotificationChannel.fromJson(json)).toList();
-    });
+  Future<List<NotificationChannel>> getAllChannels() async {
+    final result = await methodChannel.invokeMethod<List>('getChannels') ?? [];
+    if (result.isEmpty) return [];
+
+    final map = result.map((e) => Map<String, dynamic>.from(e)).toList();
+    return map.map((e) => NotificationChannel.fromJson(e)).toList();
   }
 
   @override

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:notification_channel_manager/notification_channel_manager.dart';
-import '../lib/main.dart' as app;
+import 'package:notification_channel_manager_example/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -52,24 +52,14 @@ void main() {
     testWidgets("given all fields, should create successfully, and should match the fields",
         (WidgetTester tester) async {
       final result = await NotificationChannelManager.upsertChannel(channel2);
-      expect(result.id, channel2.id);
-      expect(result.name, channel2.name);
-      expect(result.description, channel2.description);
-      expect(result.importance, channel2.importance);
-      expect(result.groupId, channel2.groupId);
-      expect(result.canShowBadge, channel2.canShowBadge);
-      expect(result.shouldShowLights, channel2.shouldShowLights);
-      expect(result.shouldVibrate, channel2.shouldVibrate);
-      // expect(result.lightColor, channel2.lightColor);
-      expect(result.sound, channel2.sound);
-      expect(result.vibrationPattern, channel2.vibrationPattern);
+      expect(result, channel2);
       results.add(result);
     });
     testWidgets("should read notification channel", (WidgetTester tester) async {
       var result = await NotificationChannelManager.getChannel(channel1.id);
       expect(result, results.first);
       result = await NotificationChannelManager.getChannel(channel2.id);
-      expect(result, results.last);
+      expect(result, channel2);
     });
     testWidgets("should read all notification channels", (WidgetTester tester) async {
       final result = await NotificationChannelManager.getAllChannels();
