@@ -14,32 +14,32 @@ enum LightColor {
   magenta,
   transparent;
 
-  int nativeValue() {
+  String nativeValue() {
     switch (this) {
       case LightColor.black:
-        return 0xFF000000;
+        return "000000";
       case LightColor.dkGray:
-        return 0xFF444444;
+        return "444444";
       case LightColor.gray:
-        return 0xFF888888;
+        return "888888";
       case LightColor.ltGray:
-        return 0xFFCCCCCC;
+        return "CCCCCC";
       case LightColor.white:
-        return 0xFFFFFFFF;
+        return "FFFFFF";
       case LightColor.red:
-        return 0xFFFF0000;
+        return "FF0000";
       case LightColor.green:
-        return 0xFF00FF00;
+        return "00FF00";
       case LightColor.blue:
-        return 0xFF0000FF;
+        return "0000FF";
       case LightColor.yellow:
-        return 0xFFFFFF00;
+        return "FFFF00";
       case LightColor.cyan:
-        return 0xFF00FFFF;
+        return "00FFFF";
       case LightColor.magenta:
-        return 0xFFFF00FF;
+        return "FF00FF";
       case LightColor.transparent:
-        return 0;
+        return "0";
     }
   }
 }

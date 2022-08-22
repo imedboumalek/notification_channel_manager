@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 part 'notification_channel_importance.dart';
@@ -12,7 +13,7 @@ class NotificationChannel {
   final bool? canShowBadge;
   final bool? shouldShowLights;
   final bool? shouldVibrate;
-  final LightColor? lightColor;
+  // final LightColor? lightColor;
   final Uri? sound;
   final Uint64List? vibrationPattern;
 
@@ -25,7 +26,7 @@ class NotificationChannel {
     this.canShowBadge,
     this.shouldShowLights,
     this.shouldVibrate,
-    this.lightColor,
+    // this.lightColor,
     this.sound,
     this.vibrationPattern,
   });
@@ -43,11 +44,12 @@ class NotificationChannel {
       canShowBadge: json['canShowBadge'] as bool,
       shouldShowLights: json['shouldShowLights'] as bool,
       shouldVibrate: json['shouldVibrate'] as bool,
-      lightColor: json["shouldShowLights"]
-          ? LightColor.values.firstWhere(
-              (e) => e.nativeValue() == json['lightColor'] as int,
-            )
-          : null,
+      // lightColor: json["shouldShowLights"]
+      //     ? LightColor.values.firstWhere(
+      //         (e) => e.nativeValue() == json['lightColor'],
+      //         orElse: () => LightColor.transparent,
+      //       )
+      //     : null,
       sound: Uri.parse(json['sound'] as String),
       vibrationPattern: json['vibrationPattern'] == null
           ? null
@@ -65,7 +67,7 @@ class NotificationChannel {
       'canShowBadge': canShowBadge,
       'shouldShowLights': shouldShowLights,
       'shouldVibrate': shouldVibrate,
-      'lightColor': lightColor?.nativeValue(),
+      // 'lightColor': lightColor?.nativeValue(),
       'sound': sound?.toString(),
       'vibrationPattern': vibrationPattern?.toList(),
     };
