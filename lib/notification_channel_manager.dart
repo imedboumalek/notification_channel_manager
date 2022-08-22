@@ -32,11 +32,11 @@ class NotificationChannelManager {
     return NotificationChannelManagerPlatform.instance.getAllGroups();
   }
 
-  static Future<NotificationChannel> getChannel(String channelId) {
+  static Future<NotificationChannel?> getChannel(String channelId) {
     return NotificationChannelManagerPlatform.instance.getChannel(channelId);
   }
 
-  static Future<NotificationChannelGroup> getGroup(String groupId) {
+  static Future<NotificationChannelGroup?> getGroup(String groupId) {
     return NotificationChannelManagerPlatform.instance.getGroup(groupId);
   }
 

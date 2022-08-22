@@ -19,10 +19,11 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannel> getChannel(String channelId) {
-    return methodChannel.invokeMethod('getChannel', channelId).then((result) {
-      return NotificationChannel.fromJson(result);
-    });
+  Future<NotificationChannel?> getChannel(String channelId) async {
+    final result = await methodChannel.invokeMethod<Map<dynamic, dynamic>>('getChannel', channelId);
+    if (result == null) return null;
+    final map = Map<String, dynamic>.from(result);
+    return NotificationChannel.fromJson(map);
   }
 
   @override
@@ -66,7 +67,7 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannelGroup> getGroup(String groupId) {
+  Future<NotificationChannelGroup?> getGroup(String groupId) {
     return methodChannel.invokeMethod('getGroup', groupId).then((result) {
       return NotificationChannelGroup.fromJson(result);
     });

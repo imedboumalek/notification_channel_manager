@@ -29,7 +29,7 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     throw UnimplementedError('getNotificationChannels() has not been implemented.');
   }
 
-  Future<NotificationChannel> getChannel(String channelId) {
+  Future<NotificationChannel?> getChannel(String channelId) {
     throw UnimplementedError('getNotificationChannel() has not been implemented.');
   }
 
@@ -53,7 +53,7 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     throw UnimplementedError('getNotificationChannelGroups() has not been implemented.');
   }
 
-  Future<NotificationChannelGroup> getGroup(String groupId) {
+  Future<NotificationChannelGroup?> getGroup(String groupId) {
     throw UnimplementedError('getNotificationChannelGroup() has not been implemented.');
   }
 
