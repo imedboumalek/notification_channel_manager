@@ -39,7 +39,10 @@ A Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGr
   - [x] Define interfaces for NotificationChannelManager to use with the Native API
 - Android:
   - [x] Implement functionalities on Native API
-- [ ] Add tests
+- [x] Add tests
+
+  Note: Current tests are flaky and need to be rewritten. Multiple tests are dependent on each other. A better approach would be to create a test suite for the native side, then mock it for the dart side. This will be done in the next iteration.
+
 - [ ] Setup example app
 - [ ] Write documentation
 

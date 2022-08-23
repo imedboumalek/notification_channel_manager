@@ -87,6 +87,11 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
+  Future<void> deleteAllChannels() {
+    return methodChannel.invokeMethod('deleteAllChannels');
+  }
+
+  @override
   Future<List<NotificationChannelGroup>> getAllGroups() {
     return methodChannel.invokeMethod('getGroups').then((result) {
       return result
@@ -135,5 +140,10 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   @override
   Future<void> deleteGroups(List<String> channelGroupIds) {
     return methodChannel.invokeMethod('deleteGroups', channelGroupIds);
+  }
+
+  @override
+  Future<void> deleteAllGroups() {
+    return methodChannel.invokeMethod('deleteAllGroups');
   }
 }

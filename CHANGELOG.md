@@ -1,3 +1,11 @@
+## (0.1.0+0)
+
+### Initial beta release
+
+- Added tests
+- Bug fixes and improvements
+- added deleteAll functionallities
+
 ## (0.0.4-dev+0)
 
 - added more fields to NotificationChannel Dart class

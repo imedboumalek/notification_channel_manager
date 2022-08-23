@@ -57,6 +57,10 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     throw UnimplementedError('deleteChannels() has not been implemented.');
   }
 
+  Future<void> deleteAllChannels() {
+    throw UnimplementedError('deleteGroup() has not been implemented.');
+  }
+
   Future<List<NotificationChannelGroup>> getAllGroups() {
     throw UnimplementedError('getNotificationChannelGroups() has not been implemented.');
   }
@@ -79,5 +83,9 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
 
   Future<void> deleteGroups(List<String> channelGroupIds) {
     throw UnimplementedError('deleteChannelGroups() has not been implemented.');
+  }
+
+  Future<void> deleteAllGroups() {
+    throw UnimplementedError('deleteAllChannelGroups() has not been implemented.');
   }
 }

@@ -12,6 +12,10 @@ void main() {
 
   group("Notification channels", () {
     app.main();
+    setUpAll(() async {
+      await NotificationChannelManager.deleteAllChannels();
+      await NotificationChannelManager.deleteAllGroups();
+    });
     const channel1 = NotificationChannel(
       id: "id",
       name: "name",
@@ -36,6 +40,10 @@ void main() {
     final createdChannels = <NotificationChannel>[];
     testWidgets("should return an empty list when there are no channels", (_) async {
       final result = await NotificationChannelManager.getAllChannels();
+      expect(result, isEmpty);
+    });
+    testWidgets("should return an empty list when there are not groups", (_) async {
+      final result = await NotificationChannelManager.getAllGroups();
       expect(result, isEmpty);
     });
     testWidgets("given just the required fields, should create successfully", (_) async {
@@ -91,7 +99,7 @@ void main() {
     testWidgets("should read all notification channels", (_) async {
       final result = await NotificationChannelManager.getAllChannels();
       expect(result, isNotEmpty);
-      expect(result, channelsWithAllFields + createdChannels);
+      expect(result, createdChannels + channelsWithAllFields);
     });
 
     testWidgets("should delete notification channel", (_) async {

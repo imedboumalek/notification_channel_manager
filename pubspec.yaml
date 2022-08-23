@@ -1,6 +1,6 @@
 name: notification_channel_manager
 description: An Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGroups.
-version: 0.0.4-dev+0
+version: 0.1.0+0
 homepage: https://github.com/imedboumalek/notification_channel_manager.git
 repository: https://github.com/imedboumalek/notification_channel_manager.git
 

@@ -56,6 +56,10 @@ class NotificationChannelManager {
     return NotificationChannelManagerPlatform.instance.updateChannels(updates);
   }
 
+  static Future<void> deleteAllChannels() {
+    return NotificationChannelManagerPlatform.instance.deleteAllChannels();
+  }
+
   static Future<NotificationChannelGroup> upsertGroup(
       NotificationChannelGroup notificationChannelGroup) {
     return NotificationChannelManagerPlatform.instance.upsertGroup(notificationChannelGroup);
@@ -64,5 +68,9 @@ class NotificationChannelManager {
   static Future<List<NotificationChannelGroup>> upsertGroups(
       List<NotificationChannelGroup> groups) {
     return NotificationChannelManagerPlatform.instance.upsertGroups(groups);
+  }
+
+  static Future<void> deleteAllGroups() {
+    return NotificationChannelManagerPlatform.instance.deleteAllGroups();
   }
 }

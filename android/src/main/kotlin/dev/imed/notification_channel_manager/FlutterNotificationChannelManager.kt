@@ -33,9 +33,9 @@ class FlutterNotificationChannelManager(
             }
             "createChannels" -> {
                 val args = call.arguments as List<Map<String, Any?>>
-                val ncs = args.map { notificationChannelFromMap(it) }
-                notificationManager.createNotificationChannels(ncs)
-                result.success(getNotificationChannels())
+                val ncs = args.map { createNotificationChannel(it) }
+
+                result.success(ncs.map { it.toMap() })
             }
             "deleteChannel" -> {
                 val id: String = call.arguments as String
@@ -49,6 +49,12 @@ class FlutterNotificationChannelManager(
                 }
                 result.success(null)
 
+            }
+            "deleteAllChannels" -> {
+            notificationManager.notificationChannels.forEach {
+                notificationManager.deleteNotificationChannel(it.id)
+            }
+                result.success(null)
             }
             // Groups
             "getGroups" -> {
@@ -88,6 +94,12 @@ class FlutterNotificationChannelManager(
                 }
                 result.success(null)
 
+            }
+            "deleteAllGroups" -> {
+                notificationManager.notificationChannelGroups.forEach {
+                    notificationManager.deleteNotificationChannelGroup(it.id)
+                }
+                result.success(null)
             }
             else -> result.notImplemented()
         }
@@ -134,6 +146,6 @@ class FlutterNotificationChannelManager(
             }
         }
         notificationManager.createNotificationChannel(nc)
-        return nc
+        return notificationManager.getNotificationChannel(nc.id)!!
     }
 }
