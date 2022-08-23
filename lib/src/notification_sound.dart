@@ -1,9 +1,9 @@
 part of 'notification_channel.dart';
 
-class NotificationSoundUri {
+class NotificationSoundUri extends Equatable {
   final Uri uri;
 
-  NotificationSoundUri(this.uri);
+  const NotificationSoundUri(this.uri);
   factory NotificationSoundUri.parse(String uri) {
     final temp = Uri.parse(uri);
     if (temp.scheme == 'android.resource') {
@@ -18,6 +18,8 @@ class NotificationSoundUri {
       : uri = Uri.parse('content://settings/system/notification_sound');
   @override
   String toString() => uri.toString();
+  @override
+  List<Object> get props => [uri];
 }
 
 class RawNotificationSound extends NotificationSoundUri {
@@ -31,4 +33,6 @@ class RawNotificationSound extends NotificationSoundUri {
     required this.fileName,
     required this.packageName,
   }) : super(Uri.parse("android.resource://$packageName/raw/$fileName"));
+  @override
+  List<Object> get props => [fileName, packageName, super.props];
 }

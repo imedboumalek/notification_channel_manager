@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:notification_channel_manager/src/notification_channel_group.dart';
@@ -94,19 +96,24 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannelGroup?> getGroup(String groupId) {
-    return methodChannel.invokeMethod('getGroup', groupId).then((result) {
-      return NotificationChannelGroup.fromJson(result);
-    });
+  Future<NotificationChannelGroup?> getGroup(String groupId) async {
+    final result = await methodChannel.invokeMethod<Map>('getGroup', groupId);
+    if (result == null) return null;
+    final map = Map<String, dynamic>.from(result);
+    map['channels'] = (map['channels'] as List).map((e) => Map<String, dynamic>.from(e)).toList();
+    return NotificationChannelGroup.fromJson(map);
   }
 
   @override
-  Future<NotificationChannelGroup> upsertGroup(NotificationChannelGroup notificationChannelGroup) {
-    return methodChannel
-        .invokeMethod('createGroup', notificationChannelGroup.toJson())
-        .then((result) {
-      return NotificationChannelGroup.fromJson(result);
-    });
+  Future<NotificationChannelGroup> upsertGroup(
+      NotificationChannelGroup notificationChannelGroup) async {
+    final result = await methodChannel.invokeMethod<Map>(
+      'createGroup',
+      notificationChannelGroup.toJson(),
+    );
+
+    final map = Map<String, dynamic>.from(result!);
+    return NotificationChannelGroup.fromJson(map);
   }
 
   @override

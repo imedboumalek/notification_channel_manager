@@ -11,19 +11,19 @@ class NotificationChannelGroup extends Equatable {
   const NotificationChannelGroup({
     required this.id,
     required this.name,
-    required this.description,
-    required this.isBlocked,
-    required this.channels,
+    this.description = "",
+    this.isBlocked = false,
+    this.channels = const [],
   });
 
   factory NotificationChannelGroup.fromJson(Map<String, dynamic> json) {
     return NotificationChannelGroup(
       id: json['id'] as String,
       name: json['name'] as String,
-      description: json['description'] as String,
-      isBlocked: json['isBlocked'] as bool,
-      channels: json['channels']
-          .map((e) => NotificationChannel.fromJson(e as Map<String, dynamic>))
+      description: json['description'] ?? '',
+      isBlocked: json['isBlocked'] ?? false,
+      channels: (json['channels'] as List<Map<String, dynamic>>)
+          .map((e) => NotificationChannel.fromJson(e))
           .toList(),
     );
   }

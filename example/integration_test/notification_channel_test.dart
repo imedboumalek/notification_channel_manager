@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:notification_channel_manager/notification_channel_manager.dart';
@@ -25,7 +24,7 @@ void main() {
       name: "name2",
       description: "description2",
       importance: NotificationChannelImportance.high,
-      groupId: null,
+      groupId: "alarms",
       canShowBadge: true,
       shouldShowLights: true,
       shouldVibrate: true,
@@ -34,7 +33,11 @@ void main() {
 
       vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
     );
-    final results = <NotificationChannel>[];
+    final createdChannels = <NotificationChannel>[];
+    testWidgets("should return an empty list when there are no channels", (_) async {
+      final result = await NotificationChannelManager.getAllChannels();
+      expect(result, isEmpty);
+    });
     testWidgets("given just the required fields, should create successfully", (_) async {
       final result = await NotificationChannelManager.createChannel(channel1);
       expect(result.id, "id");
@@ -50,48 +53,45 @@ void main() {
       expect(result.sound.toString(), "content://settings/system/notification_sound",
           reason: "Default android notification sound");
       expect(result.vibrationPattern, null);
-      results.add(result);
+      createdChannels.add(result);
     });
 
-    testWidgets("given all fields, should create successfully, and should match the fields",
+    testWidgets(
+        "given all fields, should create successfully, and values should match, reading again should also match",
         (_) async {
-      final result = await NotificationChannelManager.createChannel(channel2);
+      var result = await NotificationChannelManager.createChannel(channel2);
       expect(result, channel2);
       expect(result.sound, isA<RawNotificationSound>());
-      results.add(result);
+      createdChannels.add(result);
     });
-    testWidgets(
-        "creating a notification with a group that doesn't exist should create that group with the name being the group id",
+    testWidgets("reading a channel that doesn't exist should return null", (_) async {
+      final result = await NotificationChannelManager.getChannel("lkdjqlsdjqlid");
+      expect(result, null);
+    });
+    testWidgets("reading a channel that exists should return the channel", (_) async {
+      final result = await NotificationChannelManager.getChannel(channel2.id);
+      expect(result, channel2);
+    });
+    testWidgets("creating a channel with a group that doesn't exist, should create the group",
         (_) async {
-      const ch = NotificationChannel(
-        id: "id3",
-        name: "qsdkqjsldqjkd",
-        description: "description",
-        importance: NotificationChannelImportance.high,
-        groupId: "alarms",
-      );
-      final result = await NotificationChannelManager.createChannel(ch);
-      expect(result.groupId, "alarms");
-      expect(result.name, ch.name);
       final group = await NotificationChannelManager.getGroup("alarms");
-      expect(group, isNotNull);
+      expect(group, isA<NotificationChannelGroup>());
       expect(group!.id, "alarms");
       expect(group.name, "alarms");
+      expect(group.channels.contains(channel2), isTrue);
     });
+
     testWidgets("creating multiple channels at once", (_) async {
       final result = await NotificationChannelManager.createChannels(channelsWithAllFields);
+      expect(result, isNotEmpty);
+      expect(result.length, channelsWithAllFields.length);
       expect(result, channelsWithAllFields);
     });
 
-    testWidgets("should read notification channel", (_) async {
-      var result = await NotificationChannelManager.getChannel(channel1.id);
-      expect(result, results.first);
-      result = await NotificationChannelManager.getChannel(channel2.id);
-      expect(result, channel2);
-    });
     testWidgets("should read all notification channels", (_) async {
       final result = await NotificationChannelManager.getAllChannels();
-      expect(result, results);
+      expect(result, isNotEmpty);
+      expect(result, channelsWithAllFields + createdChannels);
     });
 
     testWidgets("should delete notification channel", (_) async {
@@ -101,10 +101,6 @@ void main() {
       await NotificationChannelManager.deleteChannel(channel2.id);
       result = await NotificationChannelManager.getChannel(channel2.id);
       expect(result, null);
-    });
-    testWidgets("should return an empty list when there are no channels", (_) async {
-      final result = await NotificationChannelManager.getAllChannels();
-      expect(result, isEmpty);
     });
   });
 }
