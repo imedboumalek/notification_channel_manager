@@ -3,7 +3,8 @@ import 'package:notification_channel_manager/notification_channel_manager.dart';
 
 void main() {
   group("NotificationChannel class", () {
-    test("NotificationChannel should have an id, name, dsc, and importance", () {
+    test("NotificationChannel should have an id, name, dsc, and importance",
+        () {
       const channel = NotificationChannel(
         id: "id",
         name: "name",

@@ -35,8 +35,8 @@ class _MyAppState extends State<MyApp> {
             child: Icon(Icons.title),
           ),
         ],
-        openFloatingActionButton: Icon(Icons.add),
-        closeFloatingActionButton: Icon(Icons.close),
+        openFloatingActionButton: const Icon(Icons.add),
+        closeFloatingActionButton: const Icon(Icons.close),
       ),
     );
   }

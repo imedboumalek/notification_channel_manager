@@ -34,7 +34,8 @@ final channelsWithAllFields = [
     shouldShowLights: true,
     shouldVibrate: true,
     // lightColor: LightColor.red,
-    sound: NotificationSoundUri.parse('android.resource://com.example.app/raw/notification'),
+    sound: NotificationSoundUri.parse(
+        'android.resource://com.example.app/raw/notification'),
     vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
   ),
   NotificationChannel(
@@ -46,7 +47,8 @@ final channelsWithAllFields = [
     canShowBadge: true,
     shouldShowLights: true,
     shouldVibrate: true,
-    sound: NotificationSoundUri.parse('content://settings/system/notification_sound'),
+    sound: NotificationSoundUri.parse(
+        'content://settings/system/notification_sound'),
   ),
   NotificationChannel(
     id: 'channel3',
@@ -58,7 +60,8 @@ final channelsWithAllFields = [
     shouldShowLights: true,
     shouldVibrate: true,
     // lightColor: LightColor.red,
-    sound: NotificationSoundUri.parse('android.resource://com.example.app/raw/notification'),
+    sound: NotificationSoundUri.parse(
+        'android.resource://com.example.app/raw/notification'),
     vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
   )
 ];

@@ -33,20 +33,24 @@ void main() {
       shouldShowLights: true,
       shouldVibrate: true,
       // lightColor: LightColor.red,
-      sound: RawNotificationSound(fileName: "sound.mp3", packageName: "dev.imed.example"),
+      sound: RawNotificationSound(
+          fileName: "sound.mp3", packageName: "dev.imed.example"),
 
       vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
     );
     final createdChannels = <NotificationChannel>[];
-    testWidgets("should return an empty list when there are no channels", (_) async {
+    testWidgets("should return an empty list when there are no channels",
+        (_) async {
       final result = await NotificationChannelManager.getAllChannels();
       expect(result, isEmpty);
     });
-    testWidgets("should return an empty list when there are not groups", (_) async {
+    testWidgets("should return an empty list when there are not groups",
+        (_) async {
       final result = await NotificationChannelManager.getAllGroups();
       expect(result, isEmpty);
     });
-    testWidgets("given just the required fields, should create successfully", (_) async {
+    testWidgets("given just the required fields, should create successfully",
+        (_) async {
       final result = await NotificationChannelManager.createChannel(channel1);
       expect(result.id, "id");
       expect(result.name, "name");
@@ -58,7 +62,8 @@ void main() {
       expect(result.shouldVibrate, false);
       // expect(result.lightColor, null);
       expect(result.sound, isA<NotificationSoundUri>());
-      expect(result.sound.toString(), "content://settings/system/notification_sound",
+      expect(result.sound.toString(),
+          "content://settings/system/notification_sound",
           reason: "Default android notification sound");
       expect(result.vibrationPattern, null);
       createdChannels.add(result);
@@ -72,15 +77,19 @@ void main() {
       expect(result.sound, isA<RawNotificationSound>());
       createdChannels.add(result);
     });
-    testWidgets("reading a channel that doesn't exist should return null", (_) async {
-      final result = await NotificationChannelManager.getChannel("lkdjqlsdjqlid");
+    testWidgets("reading a channel that doesn't exist should return null",
+        (_) async {
+      final result =
+          await NotificationChannelManager.getChannel("lkdjqlsdjqlid");
       expect(result, null);
     });
-    testWidgets("reading a channel that exists should return the channel", (_) async {
+    testWidgets("reading a channel that exists should return the channel",
+        (_) async {
       final result = await NotificationChannelManager.getChannel(channel2.id);
       expect(result, channel2);
     });
-    testWidgets("creating a channel with a group that doesn't exist, should create the group",
+    testWidgets(
+        "creating a channel with a group that doesn't exist, should create the group",
         (_) async {
       final group = await NotificationChannelManager.getGroup("alarms");
       expect(group, isA<NotificationChannelGroup>());
@@ -90,7 +99,8 @@ void main() {
     });
 
     testWidgets("creating multiple channels at once", (_) async {
-      final result = await NotificationChannelManager.createChannels(channelsWithAllFields);
+      final result = await NotificationChannelManager.createChannels(
+          channelsWithAllFields);
       expect(result, isNotEmpty);
       expect(result.length, channelsWithAllFields.length);
       expect(result, channelsWithAllFields);

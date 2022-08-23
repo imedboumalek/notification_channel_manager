@@ -13,15 +13,18 @@ class NotificationChannelManager {
   }
 
   static Future<void> deleteGroup(String channelGroupId) {
-    return NotificationChannelManagerPlatform.instance.deleteGroup(channelGroupId);
+    return NotificationChannelManagerPlatform.instance
+        .deleteGroup(channelGroupId);
   }
 
   static Future<void> deleteGroups(List<String> channelGroupIds) {
-    return NotificationChannelManagerPlatform.instance.deleteGroups(channelGroupIds);
+    return NotificationChannelManagerPlatform.instance
+        .deleteGroups(channelGroupIds);
   }
 
   static Future<void> deleteMutliChannels(List<String> channelIds) {
-    return NotificationChannelManagerPlatform.instance.deleteMutliChannels(channelIds);
+    return NotificationChannelManagerPlatform.instance
+        .deleteMutliChannels(channelIds);
   }
 
   static Future<List<NotificationChannel>> getAllChannels() {
@@ -40,19 +43,24 @@ class NotificationChannelManager {
     return NotificationChannelManagerPlatform.instance.getGroup(groupId);
   }
 
-  static Future<NotificationChannel> createChannel(NotificationChannel notificationChannel) {
-    return NotificationChannelManagerPlatform.instance.createChannel(notificationChannel);
+  static Future<NotificationChannel> createChannel(
+      NotificationChannel notificationChannel) {
+    return NotificationChannelManagerPlatform.instance
+        .createChannel(notificationChannel);
   }
 
-  static Future<List<NotificationChannel>> createChannels(List<NotificationChannel> channels) {
+  static Future<List<NotificationChannel>> createChannels(
+      List<NotificationChannel> channels) {
     return NotificationChannelManagerPlatform.instance.createChannels(channels);
   }
 
-  static Future<NotificationChannel> updateChannel(NotificationChannelUpdate update) {
+  static Future<NotificationChannel> updateChannel(
+      NotificationChannelUpdate update) {
     return NotificationChannelManagerPlatform.instance.updateChannel(update);
   }
 
-  static Future<List<NotificationChannel>> updateChannels(List<NotificationChannelUpdate> updates) {
+  static Future<List<NotificationChannel>> updateChannels(
+      List<NotificationChannelUpdate> updates) {
     return NotificationChannelManagerPlatform.instance.updateChannels(updates);
   }
 
@@ -62,7 +70,8 @@ class NotificationChannelManager {
 
   static Future<NotificationChannelGroup> upsertGroup(
       NotificationChannelGroup notificationChannelGroup) {
-    return NotificationChannelManagerPlatform.instance.upsertGroup(notificationChannelGroup);
+    return NotificationChannelManagerPlatform.instance
+        .upsertGroup(notificationChannelGroup);
   }
 
   static Future<List<NotificationChannelGroup>> upsertGroups(

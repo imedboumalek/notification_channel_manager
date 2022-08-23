@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:notification_channel_manager/src/notification_channel_group.dart';
@@ -8,7 +6,8 @@ import 'package:notification_channel_manager/src/notification_channel.dart';
 import 'notification_channel_manager_platform_interface.dart';
 
 /// An implementation of [NotificationChannelManagerPlatform] that uses method channels.
-class MethodChannelNotificationChannelManager implements NotificationChannelManagerPlatform {
+class MethodChannelNotificationChannelManager
+    implements NotificationChannelManagerPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('notification_channel_manager');
@@ -24,14 +23,16 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
 
   @override
   Future<NotificationChannel?> getChannel(String channelId) async {
-    final result = await methodChannel.invokeMethod<Map<dynamic, dynamic>>('getChannel', channelId);
+    final result = await methodChannel.invokeMethod<Map<dynamic, dynamic>>(
+        'getChannel', channelId);
     if (result == null) return null;
     final map = Map<String, dynamic>.from(result);
     return NotificationChannel.fromJson(map);
   }
 
   @override
-  Future<NotificationChannel> createChannel(NotificationChannel notificationChannel) async {
+  Future<NotificationChannel> createChannel(
+      NotificationChannel notificationChannel) async {
     try {
       var result = await methodChannel.invokeMethod<Map>(
         'createChannel',
@@ -45,7 +46,8 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<List<NotificationChannel>> createChannels(List<NotificationChannel> channels) async {
+  Future<List<NotificationChannel>> createChannels(
+      List<NotificationChannel> channels) async {
     var result = await methodChannel.invokeMethod<List>(
           'createChannels',
           channels.map((channel) => channel.toJson()).toList(),
@@ -56,7 +58,8 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannel> updateChannel(NotificationChannelUpdate update) async {
+  Future<NotificationChannel> updateChannel(
+      NotificationChannelUpdate update) async {
     var result = await methodChannel.invokeMethod<Map>(
       'createChannel',
       update.toJson(),
@@ -66,7 +69,8 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<List<NotificationChannel>> updateChannels(List<NotificationChannelUpdate> updates) async {
+  Future<List<NotificationChannel>> updateChannels(
+      List<NotificationChannelUpdate> updates) async {
     var result = await methodChannel.invokeMethod<List>(
           'createChannels',
           updates.map((channel) => channel.toJson()).toList(),
@@ -95,7 +99,8 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   Future<List<NotificationChannelGroup>> getAllGroups() {
     return methodChannel.invokeMethod('getGroups').then((result) {
       return result
-          .map<NotificationChannelGroup>((json) => NotificationChannelGroup.fromJson(json))
+          .map<NotificationChannelGroup>(
+              (json) => NotificationChannelGroup.fromJson(json))
           .toList();
     });
   }
@@ -105,7 +110,9 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
     final result = await methodChannel.invokeMethod<Map>('getGroup', groupId);
     if (result == null) return null;
     final map = Map<String, dynamic>.from(result);
-    map['channels'] = (map['channels'] as List).map((e) => Map<String, dynamic>.from(e)).toList();
+    map['channels'] = (map['channels'] as List)
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
     return NotificationChannelGroup.fromJson(map);
   }
 
@@ -122,12 +129,15 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<List<NotificationChannelGroup>> upsertGroups(List<NotificationChannelGroup> groups) {
+  Future<List<NotificationChannelGroup>> upsertGroups(
+      List<NotificationChannelGroup> groups) {
     return methodChannel
-        .invokeMethod('createGroups', groups.map((group) => group.toJson()).toList())
+        .invokeMethod(
+            'createGroups', groups.map((group) => group.toJson()).toList())
         .then((result) {
       return result
-          .map<NotificationChannelGroup>((json) => NotificationChannelGroup.fromJson(json))
+          .map<NotificationChannelGroup>(
+              (json) => NotificationChannelGroup.fromJson(json))
           .toList();
     });
   }

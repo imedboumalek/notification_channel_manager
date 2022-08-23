@@ -82,7 +82,8 @@ class NotificationChannel extends Equatable {
       sound: NotificationSoundUri.parse(json['sound'] as String),
       vibrationPattern: json['vibrationPattern'] == null
           ? null
-          : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),
+          : Uint64List.fromList(
+              (json['vibrationPattern'] as List).map((e) => e as int).toList()),
     );
   }
   Map<String, dynamic> toJson() {
