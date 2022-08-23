@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:notification_channel_manager/notification_channel_manager.dart';
 import 'package:notification_channel_manager_example/main.dart' as app;
+
+import 'fixtures/channels.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +60,29 @@ void main() {
       expect(result.sound, isA<RawNotificationSound>());
       results.add(result);
     });
+    testWidgets(
+        "creating a notification with a group that doesn't exist should create that group with the name being the group id",
+        (_) async {
+      const ch = NotificationChannel(
+        id: "id3",
+        name: "qsdkqjsldqjkd",
+        description: "description",
+        importance: NotificationChannelImportance.high,
+        groupId: "alarms",
+      );
+      final result = await NotificationChannelManager.createChannel(ch);
+      expect(result.groupId, "alarms");
+      expect(result.name, ch.name);
+      final group = await NotificationChannelManager.getGroup("alarms");
+      expect(group, isNotNull);
+      expect(group!.id, "alarms");
+      expect(group.name, "alarms");
+    });
+    testWidgets("creating multiple channels at once", (_) async {
+      final result = await NotificationChannelManager.createChannels(channelsWithAllFields);
+      expect(result, channelsWithAllFields);
+    });
+
     testWidgets("should read notification channel", (_) async {
       var result = await NotificationChannelManager.getChannel(channel1.id);
       expect(result, results.first);

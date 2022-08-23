@@ -39,9 +39,9 @@ class NotificationChannel extends Equatable {
   final String description;
   final NotificationChannelImportance importance;
   final String? groupId;
-  final bool? canShowBadge;
-  final bool? shouldShowLights;
-  final bool? shouldVibrate;
+  final bool canShowBadge;
+  final bool shouldShowLights;
+  final bool shouldVibrate;
   // final LightColor? lightColor;
   final NotificationSoundUri? sound;
   final Uint64List? vibrationPattern;
@@ -52,9 +52,9 @@ class NotificationChannel extends Equatable {
     required this.description,
     required this.importance,
     this.groupId,
-    this.canShowBadge,
-    this.shouldShowLights,
-    this.shouldVibrate,
+    this.canShowBadge = true,
+    this.shouldShowLights = false,
+    this.shouldVibrate = false,
     // this.lightColor,
     this.sound,
     this.vibrationPattern,
@@ -108,9 +108,9 @@ class NotificationChannel extends Equatable {
         description,
         importance,
         if (groupId != null) groupId!,
-        if (canShowBadge != null) canShowBadge!,
-        if (shouldShowLights != null) shouldShowLights!,
-        if (shouldVibrate != null) shouldVibrate!,
+        canShowBadge,
+        shouldShowLights,
+        shouldVibrate,
         // if (lightColor != null) lightColor!,
         if (sound != null) sound!,
         if (vibrationPattern != null) vibrationPattern!,

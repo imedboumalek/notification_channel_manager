@@ -30,12 +30,16 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
 
   @override
   Future<NotificationChannel> createChannel(NotificationChannel notificationChannel) async {
-    var result = await methodChannel.invokeMethod<Map>(
-      'createChannel',
-      notificationChannel.toJson(),
-    );
-    result = Map<String, dynamic>.from(result!);
-    return NotificationChannel.fromJson(result as Map<String, dynamic>);
+    try {
+      var result = await methodChannel.invokeMethod<Map>(
+        'createChannel',
+        notificationChannel.toJson(),
+      );
+      result = Map<String, dynamic>.from(result!);
+      return NotificationChannel.fromJson(result as Map<String, dynamic>);
+    } on PlatformException catch (e) {
+      throw ArgumentError("Failed to create channel: ${e.message}");
+    }
   }
 
   @override

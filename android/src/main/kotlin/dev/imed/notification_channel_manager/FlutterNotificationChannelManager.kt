@@ -2,6 +2,7 @@ package dev.imed.notification_channel_manager
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
+import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -27,9 +28,7 @@ class FlutterNotificationChannelManager(
             }
             "createChannel" -> {
                 val args = call.arguments as Map<String, Any?>
-                var nc = notificationChannelFromMap(args)
-                notificationManager.createNotificationChannel(nc)
-                nc = getNotificationChannel(nc.id)!!
+                val nc = createNotificationChannel(args)
                 result.success(nc.toMap())
             }
             "createChannels" -> {
@@ -44,12 +43,11 @@ class FlutterNotificationChannelManager(
                 result.success(null)
             }
             "deleteChannels" -> {
-
-                    val ids: List<String> = call.arguments as List<String>
-                    ids.forEach {
-                        notificationManager.deleteNotificationChannel(it)
-                    }
-                    result.success(null)
+                val ids: List<String> = call.arguments as List<String>
+                ids.forEach {
+                    notificationManager.deleteNotificationChannel(it)
+                }
+                result.success(null)
 
             }
             // Groups
@@ -59,8 +57,8 @@ class FlutterNotificationChannelManager(
             }
             "getGroup" -> {
                 val id = call.arguments as String
-                val group = notificationManager.getNotificationChannelGroup(id)
-                result.success(group.toMap())
+                val group = getNotificationChannelGroup(id)
+                result.success(group?.toMap())
             }
             "createGroup" -> {
                 val args = call.arguments as Map<String, Any>
@@ -84,11 +82,11 @@ class FlutterNotificationChannelManager(
             }
             "deleteGroups" -> {
 
-                    val ids: List<String> = call.arguments as List<String>
-                    ids.forEach {
-                        notificationManager.deleteNotificationChannelGroup(it)
-                    }
-                    result.success(null)
+                val ids: List<String> = call.arguments as List<String>
+                ids.forEach {
+                    notificationManager.deleteNotificationChannelGroup(it)
+                }
+                result.success(null)
 
             }
             else -> result.notImplemented()
@@ -97,21 +95,45 @@ class FlutterNotificationChannelManager(
     }
 
     private fun getNotificationChannel(id: String): NotificationChannel? {
-        try {
-
-        return notificationManager.getNotificationChannel(id)
-        }
-        catch (e: Exception) {
-            return null
+        return try {
+            notificationManager.getNotificationChannel(id)
+        } catch (e: Exception) {
+            null
         }
     }
 
-    private fun getNotificationChannels(): List<Map<String,Any?>> {
+    private fun getNotificationChannels(): List<Map<String, Any?>> {
         val channels = notificationManager.notificationChannels
-        val list= ArrayList<Map<String,Any?>>()
+        val list = ArrayList<Map<String, Any?>>()
         channels.forEach {
             list.add(it.toMap())
         }
         return list
+    }
+
+    private fun getNotificationChannelGroup(id: String): NotificationChannelGroup? {
+        return try {
+            notificationManager.getNotificationChannelGroup(id)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+
+    private fun createNotificationChannel(args: Map<String, Any?>): NotificationChannel {
+        val nc = notificationChannelFromMap(args)
+        if (nc.group != null) {
+            val g = getNotificationChannelGroup(nc.group!!)
+            if (g == null) {
+                notificationManager.createNotificationChannelGroup(
+                    NotificationChannelGroup(
+                        nc.group,
+                        nc.group
+                    )
+                )
+            }
+        }
+        notificationManager.createNotificationChannel(nc)
+        return nc
     }
 }
