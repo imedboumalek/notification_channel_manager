@@ -33,16 +33,12 @@ class MethodChannelNotificationChannelManager
   @override
   Future<NotificationChannel> createChannel(
       NotificationChannel notificationChannel) async {
-    try {
-      var result = await methodChannel.invokeMethod<Map>(
-        'createChannel',
-        notificationChannel.toJson(),
-      );
-      result = Map<String, dynamic>.from(result!);
-      return NotificationChannel.fromJson(result as Map<String, dynamic>);
-    } on PlatformException catch (e) {
-      throw ArgumentError("Failed to create channel: ${e.message}");
-    }
+    var result = await methodChannel.invokeMethod<Map>(
+      'createChannel',
+      notificationChannel.toJson(),
+    );
+    result = Map<String, dynamic>.from(result!);
+    return NotificationChannel.fromJson(result as Map<String, dynamic>);
   }
 
   @override
@@ -96,13 +92,18 @@ class MethodChannelNotificationChannelManager
   }
 
   @override
-  Future<List<NotificationChannelGroup>> getAllGroups() {
-    return methodChannel.invokeMethod('getGroups').then((result) {
-      return result
-          .map<NotificationChannelGroup>(
-              (json) => NotificationChannelGroup.fromJson(json))
+  Future<List<NotificationChannelGroup>> getAllGroups() async {
+    var result = await methodChannel.invokeMethod('getGroups') ?? [];
+    if (result.isEmpty) return [];
+    result = result.map((e) => Map<String, dynamic>.from(e)).toList();
+    for (var json in result) {
+      json['channels'] = (json['channels'] as List)
+          .map((e) => Map<String, dynamic>.from(e))
           .toList();
-    });
+    }
+    return result
+        .map((json) => NotificationChannelGroup.fromJson(json))
+        .toList();
   }
 
   @override
@@ -125,21 +126,29 @@ class MethodChannelNotificationChannelManager
     );
 
     final map = Map<String, dynamic>.from(result!);
+    map['channels'] = (map['channels'] as List)
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
     return NotificationChannelGroup.fromJson(map);
   }
 
   @override
   Future<List<NotificationChannelGroup>> upsertGroups(
-      List<NotificationChannelGroup> groups) {
-    return methodChannel
-        .invokeMethod(
-            'createGroups', groups.map((group) => group.toJson()).toList())
-        .then((result) {
-      return result
-          .map<NotificationChannelGroup>(
-              (json) => NotificationChannelGroup.fromJson(json))
+      List<NotificationChannelGroup> groups) async {
+    var result = await methodChannel.invokeMethod<List>(
+          'createGroups',
+          groups.map((group) => group.toJson()).toList(),
+        ) ??
+        [];
+    result = result.map((e) => Map<String, dynamic>.from(e)).toList();
+    for (var json in result) {
+      json['channels'] = (json['channels'] as List)
+          .map((e) => Map<String, dynamic>.from(e))
           .toList();
-    });
+    }
+    return result
+        .map((json) => NotificationChannelGroup.fromJson(json))
+        .toList();
   }
 
   @override
