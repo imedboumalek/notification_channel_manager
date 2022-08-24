@@ -78,7 +78,7 @@ class FlutterNotificationChannelManager(
                 val args = call.arguments as List<Map<String, Any>>
                 var ncgs = args.map { notificationChannelGroupFromMap(it) }
                 notificationManager.createNotificationChannelGroups(ncgs)
-                ncgs = notificationManager.notificationChannelGroups
+                ncgs = notificationManager.notificationChannelGroups.filter { ncgs.any( { item->  item.id == it.id }) }
                 result.success(ncgs.map { it.toMap() })
             }
             "deleteGroup" -> {
