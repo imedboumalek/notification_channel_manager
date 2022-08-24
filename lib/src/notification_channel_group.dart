@@ -18,8 +18,8 @@ class NotificationChannelGroup extends Equatable {
 
   factory NotificationChannelGroup.fromJson(Map<String, dynamic> json) {
     return NotificationChannelGroup(
-      id: json['id'] as String,
-      name: json['name'] as String,
+      id: json['id'],
+      name: json['name'],
       description: json['description'] ?? '',
       isBlocked: json['isBlocked'] ?? false,
       channels: (json['channels'] as List<Map<String, dynamic>>)

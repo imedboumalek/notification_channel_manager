@@ -62,9 +62,9 @@ class NotificationChannel extends Equatable {
 
   factory NotificationChannel.fromJson(Map<String, dynamic> json) {
     return NotificationChannel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
+      id: json['id'],
+      name: json['name'],
+      description: json['description'] ?? '',
       importance: NotificationChannelImportance.values.firstWhere(
         (e) => e.nativeValue() == json['importance'] as int,
         orElse: () => NotificationChannelImportance.defaultImportance,
@@ -82,8 +82,7 @@ class NotificationChannel extends Equatable {
       sound: NotificationSoundUri.parse(json['sound'] as String),
       vibrationPattern: json['vibrationPattern'] == null
           ? null
-          : Uint64List.fromList(
-              (json['vibrationPattern'] as List).map((e) => e as int).toList()),
+          : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),
     );
   }
   Map<String, dynamic> toJson() {

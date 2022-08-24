@@ -1,3 +1,7 @@
+## (0.1.1+1)
+
+bug fix
+
 ## (0.1.1+0)
 
 - fix to group read and write
