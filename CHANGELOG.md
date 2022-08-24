@@ -1,5 +1,7 @@
 ## (0.1.1+0)
 
+- fix to group read and write
+
 ## (0.1.0+1)
 
 style fixes
