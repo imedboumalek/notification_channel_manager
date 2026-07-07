@@ -1,3 +1,8 @@
+## (0.2.0+0)
+
+- added lightColor support to NotificationChannel (LightColor.nativeValue() now returns the ARGB int instead of a hex string)
+- fixed NotificationChannelGroup.isBlocked always being false: the native side never sent it (API 28+, false below)
+
 ## (0.1.1+2)
 
 - fixed method calls executing on Android < 8 (API 26) instead of no-op

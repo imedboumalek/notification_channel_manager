@@ -42,7 +42,7 @@ class NotificationChannel extends Equatable {
   final bool canShowBadge;
   final bool shouldShowLights;
   final bool shouldVibrate;
-  // final LightColor? lightColor;
+  final LightColor? lightColor;
   final NotificationSoundUri? sound;
   final Uint64List? vibrationPattern;
 
@@ -55,7 +55,7 @@ class NotificationChannel extends Equatable {
     this.canShowBadge = true,
     this.shouldShowLights = false,
     this.shouldVibrate = false,
-    // this.lightColor,
+    this.lightColor,
     this.sound,
     this.vibrationPattern,
   });
@@ -73,12 +73,13 @@ class NotificationChannel extends Equatable {
       canShowBadge: json['canShowBadge'] as bool,
       shouldShowLights: json['shouldShowLights'] as bool,
       shouldVibrate: json['shouldVibrate'] as bool,
-      // lightColor: json["shouldShowLights"]
-      //     ? LightColor.values.firstWhere(
-      //         (e) => e.nativeValue() == json['lightColor'],
-      //         orElse: () => LightColor.transparent,
-      //       )
-      //     : null,
+      lightColor: json['shouldShowLights'] == true && json['lightColor'] != null
+          ? LightColor.values.firstWhere(
+              // mask to unsigned 32-bit: the native side sends a signed Int
+              (e) => e.nativeValue() == (json['lightColor'] as int) & 0xFFFFFFFF,
+              orElse: () => LightColor.transparent,
+            )
+          : null,
       sound: json['sound'] == null
           ? null
           : NotificationSoundUri.parse(json['sound'] as String),
@@ -97,7 +98,7 @@ class NotificationChannel extends Equatable {
       'canShowBadge': canShowBadge,
       'shouldShowLights': shouldShowLights,
       'shouldVibrate': shouldVibrate,
-      // 'lightColor': lightColor?.nativeValue(),
+      'lightColor': lightColor?.nativeValue(),
       'sound': sound?.toString(),
       'vibrationPattern': vibrationPattern?.toList(),
     };
@@ -113,7 +114,7 @@ class NotificationChannel extends Equatable {
         canShowBadge,
         shouldShowLights,
         shouldVibrate,
-        // if (lightColor != null) lightColor!,
+        if (lightColor != null) lightColor!,
         if (sound != null) sound!,
         if (vibrationPattern != null) vibrationPattern!,
       ];
