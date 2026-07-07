@@ -10,6 +10,10 @@
 .svn/
 migrate_working_dir/
 
+# Claude Code
+CLAUDE.md
+.claude/
+
 # IntelliJ related
 *.iml
 *.ipr
