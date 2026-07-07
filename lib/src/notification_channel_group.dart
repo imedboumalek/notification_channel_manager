@@ -1,7 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:notification_channel_manager/src/notification_channel.dart';
 
-class NotificationChannelGroup extends Equatable {
+class NotificationChannelGroup {
   final String id;
   final String name;
   final String description;
@@ -38,5 +38,18 @@ class NotificationChannelGroup extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, name, description, channels, isBlocked];
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is NotificationChannelGroup &&
+            runtimeType == other.runtimeType &&
+            id == other.id &&
+            name == other.name &&
+            description == other.description &&
+            isBlocked == other.isBlocked &&
+            listEquals(channels, other.channels);
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, description, isBlocked, Object.hashAll(channels));
 }

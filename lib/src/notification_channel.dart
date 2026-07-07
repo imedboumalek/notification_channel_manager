@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 part 'notification_sound.dart';
 
 part 'notification_channel_importance.dart';
 part 'notification_channel_light_color.dart';
 
-class NotificationChannelUpdate extends Equatable {
+class NotificationChannelUpdate {
   final String id;
   final String name;
   final String description;
@@ -21,7 +21,18 @@ class NotificationChannelUpdate extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, name, description, importance];
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is NotificationChannelUpdate &&
+            runtimeType == other.runtimeType &&
+            id == other.id &&
+            name == other.name &&
+            description == other.description &&
+            importance == other.importance;
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, description, importance);
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,7 +44,7 @@ class NotificationChannelUpdate extends Equatable {
   }
 }
 
-class NotificationChannel extends Equatable {
+class NotificationChannel {
   final String id;
   final String name;
   final String description;
@@ -105,17 +116,35 @@ class NotificationChannel extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is NotificationChannel &&
+            runtimeType == other.runtimeType &&
+            id == other.id &&
+            name == other.name &&
+            description == other.description &&
+            importance == other.importance &&
+            groupId == other.groupId &&
+            canShowBadge == other.canShowBadge &&
+            shouldShowLights == other.shouldShowLights &&
+            shouldVibrate == other.shouldVibrate &&
+            lightColor == other.lightColor &&
+            sound == other.sound &&
+            listEquals(vibrationPattern, other.vibrationPattern);
+  }
+
+  @override
+  int get hashCode => Object.hash(
         id,
         name,
         description,
         importance,
-        if (groupId != null) groupId!,
+        groupId,
         canShowBadge,
         shouldShowLights,
         shouldVibrate,
-        if (lightColor != null) lightColor!,
-        if (sound != null) sound!,
-        if (vibrationPattern != null) vibrationPattern!,
-      ];
+        lightColor,
+        sound,
+        vibrationPattern == null ? null : Object.hashAll(vibrationPattern!),
+      );
 }

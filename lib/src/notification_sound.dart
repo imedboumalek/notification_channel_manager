@@ -1,6 +1,6 @@
 part of 'notification_channel.dart';
 
-class NotificationSoundUri extends Equatable {
+class NotificationSoundUri {
   final Uri uri;
 
   const NotificationSoundUri(this.uri);
@@ -18,8 +18,17 @@ class NotificationSoundUri extends Equatable {
       : uri = Uri.parse('content://settings/system/notification_sound');
   @override
   String toString() => uri.toString();
+
   @override
-  List<Object> get props => [uri];
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is NotificationSoundUri &&
+            runtimeType == other.runtimeType &&
+            uri == other.uri;
+  }
+
+  @override
+  int get hashCode => uri.hashCode;
 }
 
 class RawNotificationSound extends NotificationSoundUri {
@@ -33,6 +42,16 @@ class RawNotificationSound extends NotificationSoundUri {
     required this.fileName,
     required this.packageName,
   }) : super(Uri.parse("android.resource://$packageName/raw/$fileName"));
+
   @override
-  List<Object> get props => [fileName, packageName, super.props];
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is RawNotificationSound &&
+            runtimeType == other.runtimeType &&
+            fileName == other.fileName &&
+            packageName == other.packageName;
+  }
+
+  @override
+  int get hashCode => Object.hash(fileName, packageName);
 }
