@@ -1,3 +1,10 @@
+## (0.1.1+2)
+
+- fixed method calls executing on Android < 8 (API 26) instead of no-op
+- fixed null channel sound being serialized as the string "null"
+- guarded group description behind API 28 (where Android introduced it)
+- removed leftover debug logging
+
 ## (0.1.1+1)
 
 bug fix

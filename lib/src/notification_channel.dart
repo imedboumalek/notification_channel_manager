@@ -79,7 +79,9 @@ class NotificationChannel extends Equatable {
       //         orElse: () => LightColor.transparent,
       //       )
       //     : null,
-      sound: NotificationSoundUri.parse(json['sound'] as String),
+      sound: json['sound'] == null
+          ? null
+          : NotificationSoundUri.parse(json['sound'] as String),
       vibrationPattern: json['vibrationPattern'] == null
           ? null
           : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),

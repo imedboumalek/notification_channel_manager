@@ -5,11 +5,11 @@ import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.media.AudioAttributes
 import android.net.Uri
+import android.os.Build
 
 
 @SuppressLint("NewApi")
 fun NotificationChannel.toMap(): Map<String, Any?> {
-    println("color in toMap: $lightColor")
     return mapOf(
         "id" to id,
         "name" to name,
@@ -21,7 +21,7 @@ fun NotificationChannel.toMap(): Map<String, Any?> {
         "shouldShowLights" to shouldShowLights(),
         "shouldVibrate" to shouldVibrate(),
         //  "lightColor" to lightColor,
-        "sound" to sound.toString(),
+        "sound" to sound?.toString(),
         "vibrationPattern" to vibrationPattern?.toList(),
 
         )
@@ -73,11 +73,12 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
 }
 
 @SuppressLint("NewApi")
-fun NotificationChannelGroup.toMap(): Map<String, Any> {
+fun NotificationChannelGroup.toMap(): Map<String, Any?> {
     return mapOf(
         "id" to id,
         "name" to name,
-        "description" to description,
+        // NotificationChannelGroup.getDescription() requires API 28
+        "description" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) description else null,
         "channels" to channels.map { it.toMap() }
     )
 }
@@ -90,7 +91,7 @@ fun notificationChannelGroupFromMap(map: Map<String, Any?>): NotificationChannel
         map["name"] as String,
 
         )
-    if (map["description"] != null) {
+    if (map["description"] != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         group.description = map["description"] as String
     }
     return group
