@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:notification_channel_manager/notification_channel_manager.dart';
 
+import 'test_notifier.dart';
+
 /// Shows a channel as Android stored it and lets you update the fields
 /// Android allows changing after creation: name, description, importance.
 class ChannelDetailPage extends StatefulWidget {
@@ -48,7 +50,41 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
   Widget build(BuildContext context) {
     final channel = widget.channel;
     return Scaffold(
-      appBar: AppBar(title: Text(channel.name)),
+      appBar: AppBar(
+        title: Text(channel.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.send),
+            tooltip: 'Send test notification',
+            onPressed: () async {
+              final sent = await TestNotifier.send(channel.id);
+              if (!sent && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Could not post — grant the notification '
+                        'permission and try again.'),
+                  ),
+                );
+              }
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.bubble_chart),
+            tooltip: 'Send test bubble notification',
+            onPressed: () async {
+              final sent = await TestNotifier.sendBubble(channel.id);
+              if (!sent && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Could not post — needs Android 11+ and '
+                        'the notification permission.'),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -77,6 +113,34 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
             title: const Text('Vibration'),
             trailing: Text(channel.shouldVibrate ? 'on' : 'off'),
           ),
+          ListTile(
+            dense: true,
+            title: const Text('Bypasses Do Not Disturb'),
+            trailing: Text(channel.canBypassDnd ? 'yes' : 'no'),
+          ),
+          if (channel.isConversation)
+            ListTile(
+              dense: true,
+              title: const Text('Conversation'),
+              trailing: Text(
+                  '${channel.parentChannelId} · ${channel.conversationId}'
+                  '${channel.isImportantConversation ? ' · important' : ''}'
+                  '${channel.isDemoted ? ' · demoted' : ''}'),
+            ),
+          ListTile(
+            dense: true,
+            title: const Text('Bubbles'),
+            trailing: Text(channel.allowBubbles ? 'allowed' : 'off'),
+          ),
+          if (channel.hasUserSetImportance || channel.hasUserSetSound)
+            ListTile(
+              dense: true,
+              title: const Text('Changed by user'),
+              trailing: Text([
+                if (channel.hasUserSetImportance) 'importance',
+                if (channel.hasUserSetSound) 'sound',
+              ].join(', ')),
+            ),
           ListTile(
             dense: true,
             title: const Text('Sound'),

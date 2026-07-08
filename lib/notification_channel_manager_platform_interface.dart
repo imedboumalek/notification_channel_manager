@@ -1,3 +1,4 @@
+import 'package:notification_channel_manager/src/bubble_preference.dart';
 import 'package:notification_channel_manager/src/notification_channel.dart';
 import 'package:notification_channel_manager/src/notification_channel_group.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -31,7 +32,8 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
         'getAllChannels() has not been implemented.');
   }
 
-  Future<NotificationChannel?> getChannel(String channelId) {
+  Future<NotificationChannel?> getChannel(String channelId,
+      {String? conversationId}) {
     throw UnimplementedError(
         'getChannel() has not been implemented.');
   }
@@ -101,5 +103,18 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
   Future<void> deleteAllGroups() {
     throw UnimplementedError(
         'deleteAllGroups() has not been implemented.');
+  }
+
+  Future<bool> areBubblesAllowed() {
+    throw UnimplementedError('areBubblesAllowed() has not been implemented.');
+  }
+
+  Future<bool> areBubblesEnabled() {
+    throw UnimplementedError('areBubblesEnabled() has not been implemented.');
+  }
+
+  Future<BubblePreference> getBubblePreference() {
+    throw UnimplementedError(
+        'getBubblePreference() has not been implemented.');
   }
 }

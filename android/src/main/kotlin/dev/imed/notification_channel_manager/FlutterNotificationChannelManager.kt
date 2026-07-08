@@ -25,8 +25,21 @@ class FlutterNotificationChannelManager(
                 result.success(getNotificationChannels())
             }
             "getChannel" -> {
-                val id = call.arguments as String
-                val ch = getNotificationChannel(id)
+                val ch = when (val args = call.arguments) {
+                    is String -> getNotificationChannel(args)
+                    is Map<*, *> -> {
+                        val id = args["id"] as String
+                        val conversationId = args["conversationId"] as String?
+                        if (conversationId != null &&
+                            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R
+                        ) {
+                            notificationManager.getNotificationChannel(id, conversationId)
+                        } else {
+                            getNotificationChannel(id)
+                        }
+                    }
+                    else -> null
+                }
                 result.success(ch?.toMap())
             }
             "createChannel" -> {
@@ -103,6 +116,29 @@ class FlutterNotificationChannelManager(
                     notificationManager.deleteNotificationChannelGroup(it.id)
                 }
                 result.success(null)
+            }
+            // App-level bubble settings
+            "areBubblesAllowed" -> {
+                result.success(
+                    android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
+                        notificationManager.areBubblesAllowed()
+                )
+            }
+            "areBubblesEnabled" -> {
+                result.success(
+                    android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S &&
+                        notificationManager.areBubblesEnabled()
+                )
+            }
+            "getBubblePreference" -> {
+                val preference = when {
+                    android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S ->
+                        notificationManager.bubblePreference
+                    android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q ->
+                        if (notificationManager.areBubblesAllowed()) 1 else 0
+                    else -> 0
+                }
+                result.success(preference)
             }
             else -> result.notImplemented()
         }

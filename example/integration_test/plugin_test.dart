@@ -168,4 +168,100 @@ void main() {
       expect(result, null);
     });
   });
+
+  group("Modern channel features", () {
+    setUpAll(() async {
+      await NotificationChannelManager.deleteAllChannels();
+      await NotificationChannelManager.deleteAllGroups();
+    });
+    tearDownAll(() async {
+      await NotificationChannelManager.deleteAllChannels();
+      await NotificationChannelManager.deleteAllGroups();
+    });
+
+    testWidgets("a plain channel reads back the model's defaults", (_) async {
+      const channel = NotificationChannel(
+        id: "modern1",
+        name: "modern1",
+        description: "modern1",
+        importance: NotificationChannelImportance.defaultImportance,
+      );
+      final result = await NotificationChannelManager.createChannel(channel);
+      expect(result.canBypassDnd, false);
+      expect(result.allowBubbles, false);
+      expect(result.hasUserSetImportance, false);
+      expect(result.hasUserSetSound, false);
+      expect(result.isBlockable, false);
+      expect(result.isConversation, false);
+      expect(result.isImportantConversation, false);
+      expect(result.isDemoted, false);
+      expect(result.parentChannelId, null);
+      expect(result.conversationId, null);
+    });
+
+    testWidgets("conversation channels round trip and can be looked up",
+        (_) async {
+      const parent = NotificationChannel(
+        id: "messages",
+        name: "Messages",
+        description: "Chat messages",
+        importance: NotificationChannelImportance.high,
+      );
+      await NotificationChannelManager.createChannel(parent);
+
+      const conversation = NotificationChannel(
+        id: "messages_alice",
+        name: "Alice",
+        description: "Chat messages from Alice",
+        importance: NotificationChannelImportance.high,
+        parentChannelId: "messages",
+        conversationId: "contact_alice",
+      );
+      final created =
+          await NotificationChannelManager.createChannel(conversation);
+      expect(created.parentChannelId, "messages");
+      expect(created.conversationId, "contact_alice");
+      expect(created.isConversation, true);
+      expect(created.isDemoted, false);
+
+      // conversation-aware lookup resolves to the conversation channel
+      final byConversation = await NotificationChannelManager.getChannel(
+          "messages",
+          conversationId: "contact_alice");
+      expect(byConversation!.id, "messages_alice");
+
+      // unknown conversation falls back to the parent channel
+      final fallback = await NotificationChannelManager.getChannel("messages",
+          conversationId: "contact_nobody");
+      expect(fallback!.id, "messages");
+    });
+
+    testWidgets("allowBubbles is only honored when the app may bubble",
+        (_) async {
+      const channel = NotificationChannel(
+        id: "messages_bubbly",
+        name: "Bubbly",
+        description: "Bubbling conversation",
+        importance: NotificationChannelImportance.high,
+        parentChannelId: "messages",
+        conversationId: "contact_bubbly",
+        allowBubbles: true,
+      );
+      final created = await NotificationChannelManager.createChannel(channel);
+      // Android ignores the per-channel opt-in unless the user has allowed
+      // bubbles for the app.
+      final appMayBubble = await NotificationChannelManager.areBubblesAllowed();
+      expect(created.allowBubbles, appMayBubble);
+    });
+
+    testWidgets("app-level bubble queries return valid values", (_) async {
+      final allowed = await NotificationChannelManager.areBubblesAllowed();
+      final enabled = await NotificationChannelManager.areBubblesEnabled();
+      final preference =
+          await NotificationChannelManager.getBubblePreference();
+      expect(allowed, isA<bool>());
+      expect(enabled, isA<bool>());
+      expect(preference, isA<BubblePreference>());
+    });
+  });
 }
