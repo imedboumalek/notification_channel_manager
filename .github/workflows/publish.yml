@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
+  # Allows the tag-release workflow to trigger publishing: tags pushed with
+  # GITHUB_TOKEN don't fire push-triggered workflows (anti-recursion), so it
+  # dispatches this workflow on the tag ref instead.
+  workflow_dispatch:
 
 jobs:
   publish:
