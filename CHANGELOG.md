@@ -6,6 +6,7 @@
 - rewrote the example app as a self-contained, full-featured demo: create channels with all options (importance, group, badge, lights + color, vibration), update channels, manage groups
 - example app package moved to dev.imed.notification_channel_manager_example
 - lightColor now reads back as null when Android reports no color set (0) or an unknown custom color
+- documented the entire public API (dartdoc) and rewrote the README with usage examples and Android behavior notes
 
 ## (0.2.0+0)
 

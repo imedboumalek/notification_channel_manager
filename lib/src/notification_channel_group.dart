@@ -1,11 +1,30 @@
 import 'package:flutter/foundation.dart';
 import 'package:notification_channel_manager/src/notification_channel.dart';
 
+/// An Android notification channel group, used to organize channels in the
+/// system notification settings (e.g. one group per account).
+///
+/// Mirrors Android's `NotificationChannelGroup`. Deleting a group also
+/// deletes all channels that belong to it.
 class NotificationChannelGroup {
+  /// Unique id of the group, referenced by [NotificationChannel.groupId].
   final String id;
+
+  /// User-visible name, shown in the system notification settings.
   final String name;
+
+  /// User-visible description. Only supported on Android 9 (API 28) and
+  /// above; below that it is ignored on write and empty on read.
   final String description;
+
+  /// The channels belonging to this group.
+  ///
+  /// Read-only: populated when reading groups back. To put a channel in a
+  /// group, set [NotificationChannel.groupId] when creating the channel.
   final List<NotificationChannel> channels;
+
+  /// Whether the user has blocked this group's notifications. Read-only,
+  /// and always false below Android 9 (API 28).
   final bool isBlocked;
 
   const NotificationChannelGroup({

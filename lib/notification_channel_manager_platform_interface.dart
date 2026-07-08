@@ -28,33 +28,33 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
 
   Future<List<NotificationChannel>> getAllChannels() {
     throw UnimplementedError(
-        'getNotificationChannels() has not been implemented.');
+        'getAllChannels() has not been implemented.');
   }
 
   Future<NotificationChannel?> getChannel(String channelId) {
     throw UnimplementedError(
-        'getNotificationChannel() has not been implemented.');
+        'getChannel() has not been implemented.');
   }
 
   Future<NotificationChannel> createChannel(
       NotificationChannel notificationChannel) {
     throw UnimplementedError(
-        'upsertNotificationChannel() has not been implemented.');
+        'createChannel() has not been implemented.');
   }
 
   Future<List<NotificationChannel>> createChannels(
       List<NotificationChannel> channels) {
-    throw UnimplementedError('upsertChannels has not been implemented.');
+    throw UnimplementedError('createChannels() has not been implemented.');
   }
 
   Future<NotificationChannel> updateChannel(NotificationChannelUpdate update) {
     throw UnimplementedError(
-        'upsertNotificationChannel() has not been implemented.');
+        'updateChannel() has not been implemented.');
   }
 
   Future<List<NotificationChannel>> updateChannels(
       List<NotificationChannelUpdate> updates) {
-    throw UnimplementedError('upsertChannels has not been implemented.');
+    throw UnimplementedError('updateChannels() has not been implemented.');
   }
 
   Future<void> deleteChannel(String channelId) {
@@ -62,27 +62,27 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
   }
 
   Future<void> deleteMutliChannels(List<String> channelIds) {
-    throw UnimplementedError('deleteChannels() has not been implemented.');
+    throw UnimplementedError('deleteMutliChannels() has not been implemented.');
   }
 
   Future<void> deleteAllChannels() {
-    throw UnimplementedError('deleteGroup() has not been implemented.');
+    throw UnimplementedError('deleteAllChannels() has not been implemented.');
   }
 
   Future<List<NotificationChannelGroup>> getAllGroups() {
     throw UnimplementedError(
-        'getNotificationChannelGroups() has not been implemented.');
+        'getAllGroups() has not been implemented.');
   }
 
   Future<NotificationChannelGroup?> getGroup(String groupId) {
     throw UnimplementedError(
-        'getNotificationChannelGroup() has not been implemented.');
+        'getGroup() has not been implemented.');
   }
 
   Future<NotificationChannelGroup> upsertGroup(
       NotificationChannelGroup notificationChannelGroup) {
     throw UnimplementedError(
-        'upsertNotificationChannelGroup() has not been implemented.');
+        'upsertGroup() has not been implemented.');
   }
 
   Future<List<NotificationChannelGroup>> upsertGroups(
@@ -91,15 +91,15 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
   }
 
   Future<void> deleteGroup(String channelGroupId) {
-    throw UnimplementedError('deleteChannelGroup() has not been implemented.');
+    throw UnimplementedError('deleteGroup() has not been implemented.');
   }
 
   Future<void> deleteGroups(List<String> channelGroupIds) {
-    throw UnimplementedError('deleteChannelGroups() has not been implemented.');
+    throw UnimplementedError('deleteGroups() has not been implemented.');
   }
 
   Future<void> deleteAllGroups() {
     throw UnimplementedError(
-        'deleteAllChannelGroups() has not been implemented.');
+        'deleteAllGroups() has not been implemented.');
   }
 }

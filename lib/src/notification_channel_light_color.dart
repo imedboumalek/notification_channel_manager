@@ -1,5 +1,12 @@
 part of "notification_channel.dart";
 
+/// Preset colors for the notification LED, matching Android's
+/// `android.graphics.Color` constants.
+///
+/// Set [NotificationChannel.lightColor] together with
+/// [NotificationChannel.shouldShowLights]. Note that many modern devices no
+/// longer have a notification LED, in which case the color has no visible
+/// effect.
 enum LightColor {
   black,
   dkGray,
