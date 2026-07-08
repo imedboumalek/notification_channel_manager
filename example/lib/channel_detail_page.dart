@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:notification_channel_manager/notification_channel_manager.dart';
 
+import 'test_notifier.dart';
+
 /// Shows a channel as Android stored it and lets you update the fields
 /// Android allows changing after creation: name, description, importance.
 class ChannelDetailPage extends StatefulWidget {
@@ -48,7 +50,26 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
   Widget build(BuildContext context) {
     final channel = widget.channel;
     return Scaffold(
-      appBar: AppBar(title: Text(channel.name)),
+      appBar: AppBar(
+        title: Text(channel.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.send),
+            tooltip: 'Send test notification',
+            onPressed: () async {
+              final sent = await TestNotifier.send(channel.id);
+              if (!sent && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Could not post — grant the notification '
+                        'permission and try again.'),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

@@ -4,6 +4,7 @@ import 'package:notification_channel_manager/notification_channel_manager.dart';
 import 'channel_detail_page.dart';
 import 'channel_form_page.dart';
 import 'group_form_page.dart';
+import 'test_notifier.dart';
 
 void main() {
   runApp(const ExampleApp());
@@ -194,14 +195,35 @@ class _ChannelsTab extends StatelessWidget {
                   subtitle: Text(
                       '${channel.id} · ${channel.importance.name}'
                       '${channel.groupId != null ? ' · in ${channel.groupId}' : ''}'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    tooltip: 'Delete channel',
-                    onPressed: () async {
-                      await NotificationChannelManager.deleteChannel(
-                          channel.id);
-                      await onRefresh();
-                    },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.send),
+                        tooltip: 'Send test notification',
+                        onPressed: () async {
+                          final sent = await TestNotifier.send(channel.id);
+                          if (!sent && context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Could not post — grant the notification '
+                                    'permission and try again.'),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: 'Delete channel',
+                        onPressed: () async {
+                          await NotificationChannelManager.deleteChannel(
+                              channel.id);
+                          await onRefresh();
+                        },
+                      ),
+                    ],
                   ),
                   onTap: () => onTap(channel),
                 );
