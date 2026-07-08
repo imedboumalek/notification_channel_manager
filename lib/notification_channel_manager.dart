@@ -55,9 +55,9 @@ class NotificationChannelManager {
   ///
   /// Like [deleteChannel], each deletion is a soft delete. Ids that don't
   /// match an existing channel are ignored.
-  static Future<void> deleteMutliChannels(List<String> channelIds) {
+  static Future<void> deleteMultiChannels(List<String> channelIds) {
     return NotificationChannelManagerPlatform.instance
-        .deleteMutliChannels(channelIds);
+        .deleteMultiChannels(channelIds);
   }
 
   /// Returns all notification channels of this app.

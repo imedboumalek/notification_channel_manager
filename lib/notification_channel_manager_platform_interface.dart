@@ -61,8 +61,8 @@ abstract class NotificationChannelManagerPlatform extends PlatformInterface {
     throw UnimplementedError('deleteChannel() has not been implemented.');
   }
 
-  Future<void> deleteMutliChannels(List<String> channelIds) {
-    throw UnimplementedError('deleteMutliChannels() has not been implemented.');
+  Future<void> deleteMultiChannels(List<String> channelIds) {
+    throw UnimplementedError('deleteMultiChannels() has not been implemented.');
   }
 
   Future<void> deleteAllChannels() {

@@ -84,7 +84,7 @@ await NotificationChannelManager.deleteChannel('urgent_alerts');
 await NotificationChannelManager.deleteAllChannels();
 ```
 
-Batch variants exist for everything: `createChannels`, `updateChannels`, `deleteMutliChannels`, `upsertGroups`, `deleteGroups`, `deleteAllGroups`.
+Batch variants exist for everything: `createChannels`, `updateChannels`, `deleteMultiChannels`, `upsertGroups`, `deleteGroups`, `deleteAllGroups`.
 
 ## Things to keep in mind
 

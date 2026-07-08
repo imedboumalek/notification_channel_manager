@@ -76,7 +76,7 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<void> deleteMutliChannels(List<String> channelIds) {
+  Future<void> deleteMultiChannels(List<String> channelIds) {
     return methodChannel.invokeMethod('deleteChannels', channelIds);
   }
 
