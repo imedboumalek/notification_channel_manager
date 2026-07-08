@@ -68,6 +68,21 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
               }
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.bubble_chart),
+            tooltip: 'Send test bubble notification',
+            onPressed: () async {
+              final sent = await TestNotifier.sendBubble(channel.id);
+              if (!sent && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Could not post — needs Android 11+ and '
+                        'the notification permission.'),
+                  ),
+                );
+              }
+            },
+          ),
         ],
       ),
       body: ListView(

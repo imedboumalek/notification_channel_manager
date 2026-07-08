@@ -26,4 +26,16 @@ class TestNotifier {
         }) ??
         false;
   }
+
+  /// Sends a bubble-capable conversation notification to [channelId]:
+  /// MessagingStyle + long-lived shortcut + BubbleMetadata expanding into
+  /// BubbleActivity. Whether it actually bubbles depends on the user's
+  /// bubble settings; otherwise it shows as a conversation notification with
+  /// a bubble affordance. Requires Android 11 (API 30).
+  static Future<bool> sendBubble(String channelId) async {
+    return await _channel.invokeMethod<bool>('sendTestBubbleNotification', {
+          'channelId': channelId,
+        }) ??
+        false;
+  }
 }

@@ -14,7 +14,13 @@ A small channel-manager UI that exercises the whole API:
 - send a test notification to any channel to hear/see its settings in action
   ([lib/test_notifier.dart](lib/test_notifier.dart) — posting is out of scope
   for the plugin, so the example brings its own tiny sender in
-  MainActivity.kt, including the Android 13+ permission request).
+  MainActivity.kt, including the Android 13+ permission request),
+- send a test *bubble* notification (Android 11+): a MessagingStyle
+  conversation tied to a long-lived shortcut with BubbleMetadata expanding
+  into BubbleActivity. Note that bubbles only float once the user allows
+  bubbles for the app (Settings → Notifications → Bubbles, or
+  `adb shell cmd notification set_bubbles <package> 1`); otherwise the
+  notification shows with a bubble affordance instead.
 
 Run it on an Android device or emulator with `flutter run`.
 
