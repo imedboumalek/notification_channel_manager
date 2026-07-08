@@ -2,15 +2,21 @@
 
 Demonstrates how to use the notification_channel_manager plugin.
 
-## Getting Started
+A small channel-manager UI that exercises the whole API:
 
-This project is a starting point for a Flutter application.
+- browse the app's notification channels and groups (with pull-to-refresh),
+- create channels with every option the plugin supports — importance, group,
+  badge, lights with a color, vibration ([lib/channel_form_page.dart](lib/channel_form_page.dart)),
+- inspect a channel as Android stored it and update the fields Android allows
+  changing ([lib/channel_detail_page.dart](lib/channel_detail_page.dart)),
+- create/update groups ([lib/group_form_page.dart](lib/group_form_page.dart)),
+- delete individual channels and groups, or everything at once.
 
-A few resources to get you started if this is your first Flutter project:
+Run it on an Android device or emulator with `flutter run`.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+The plugin's integration tests also live here; run them with a device
+attached:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter test integration_test/plugin_test.dart
+```

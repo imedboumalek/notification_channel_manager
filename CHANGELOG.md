@@ -1,3 +1,26 @@
+## (0.3.0+0)
+
+- **BREAKING**: renamed `deleteMutliChannels` to `deleteMultiChannels`
+- updated all dependencies: Dart 3 (sdk ^3.12.0), flutter_lints 6, AGP 9.0 / Kotlin 2.3 / Gradle 9.1 (Kotlin DSL)
+- removed the equatable dependency; the plugin now depends only on Flutter and plugin_platform_interface
+- raised Android minSdk from 16 to 24 (current Flutter minimum)
+- rewrote the example app as a self-contained, full-featured demo: create channels with all options (importance, group, badge, lights + color, vibration), update channels, manage groups
+- example app package moved to dev.imed.notification_channel_manager_example
+- lightColor now reads back as null when Android reports no color set (0) or an unknown custom color
+- documented the entire public API (dartdoc) and rewrote the README with usage examples and Android behavior notes
+
+## (0.2.0+0)
+
+- added lightColor support to NotificationChannel (LightColor.nativeValue() now returns the ARGB int instead of a hex string)
+- fixed NotificationChannelGroup.isBlocked always being false: the native side never sent it (API 28+, false below)
+
+## (0.1.1+2)
+
+- fixed method calls executing on Android < 8 (API 26) instead of no-op
+- fixed null channel sound being serialized as the string "null"
+- guarded group description behind API 28 (where Android introduced it)
+- removed leftover debug logging
+
 ## (0.1.1+1)
 
 bug fix

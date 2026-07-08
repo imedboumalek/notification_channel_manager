@@ -1,55 +1,113 @@
-# notification_channel_manager (WIP)
+# notification_channel_manager
 
-A Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGroups.
+An Android plugin to manage (CRUD) [NotificationChannels](https://developer.android.com/reference/android/app/NotificationChannel) and [NotificationChannelGroups](https://developer.android.com/reference/android/app/NotificationChannelGroup).
 
-## Useful Links
+Notification channels are how Android lets users control an app's notifications per category (sound, vibration, importance, …) from the system settings. This plugin gives you the full lifecycle from Dart: create channels and groups with all their options, read them back exactly as Android stored them, update what Android allows updating, and delete them.
 
-- [Android Notification Channels (Android Training)](https://developer.android.com/training/notify-user/channels)
-- [NotificationChannel (API reference)](https://developer.android.com/reference/android/app/NotificationChannel)
+## Requirements
 
-- [NotificationChannelGroup (API reference)](https://developer.android.com/reference/android/app/NotificationChannelGroup)
+- Android 8.0 (API 26) or above at runtime — on older versions every call is a **no-op** (nothing is thrown; reads return `null`/empty).
+- `minSdkVersion` 24 or above, Dart 3.
 
-- [NotificationManager (API reference)](https://developer.android.com/reference/android/app/NotificationManager)
+This is an Android-only plugin; there is no iOS equivalent to notification channels.
+
+## Usage
+
+### Create a channel
+
+```dart
+import 'package:notification_channel_manager/notification_channel_manager.dart';
+
+await NotificationChannelManager.createChannel(const NotificationChannel(
+  id: 'urgent_alerts',
+  name: 'Urgent alerts',
+  description: 'Time-critical alerts that need your attention',
+  importance: NotificationChannelImportance.high,
+));
+```
+
+`createChannel` returns the channel **as Android stored it** — Android fills in defaults (like the system notification sound) and may clamp values, so the returned object can differ from what you passed in.
+
+### Create a channel with all options
+
+```dart
+final channel = await NotificationChannelManager.createChannel(NotificationChannel(
+  id: 'incoming_calls',
+  name: 'Incoming calls',
+  description: 'Ringing for incoming calls',
+  importance: NotificationChannelImportance.high,
+  groupId: 'calls',                    // group is auto-created if it doesn't exist
+  canShowBadge: true,
+  shouldShowLights: true,
+  lightColor: LightColor.red,
+  shouldVibrate: true,
+  vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
+  sound: RawNotificationSound(
+    fileName: 'ringtone',              // res/raw/ringtone.mp3 in your app
+    packageName: 'com.example.app',
+  ),
+));
+```
+
+### Groups
+
+```dart
+// Create or update (the native call is an upsert):
+await NotificationChannelManager.upsertGroup(const NotificationChannelGroup(
+  id: 'calls',
+  name: 'Calls',
+  description: 'Everything call-related', // visible on API 28+ only
+));
+
+// Read back, populated with their channels:
+final groups = await NotificationChannelManager.getAllGroups();
+
+// Deleting a group deletes its channels too:
+await NotificationChannelManager.deleteGroup('calls');
+```
+
+### Read, update, delete
+
+```dart
+final all = await NotificationChannelManager.getAllChannels();
+final one = await NotificationChannelManager.getChannel('urgent_alerts'); // null if absent
+
+// Only name, description, and importance are updatable after creation:
+await NotificationChannelManager.updateChannel(const NotificationChannelUpdate(
+  id: 'urgent_alerts',
+  name: 'Critical alerts',
+  description: 'Renamed',
+  importance: NotificationChannelImportance.defaultImportance,
+));
+
+await NotificationChannelManager.deleteChannel('urgent_alerts');
+await NotificationChannelManager.deleteAllChannels();
+```
+
+Batch variants exist for everything: `createChannels`, `updateChannels`, `deleteMultiChannels`, `upsertGroups`, `deleteGroups`, `deleteAllGroups`.
 
 ## Things to keep in mind
 
-- Notification Channels are an API 26 (Android 8) and above feature. If your app is targeting an older version of Android, no errors will be thrown, but the plugin won't do anything.
+These are Android behaviors, not plugin choices — see the [official docs](https://developer.android.com/develop/ui/views/notifications/channels):
 
-- Deleting a notification channel is soft delete, creating another with the same `id` will undelete it and keep the same settings as the old one. see [this](https://developer.android.com/reference/android/app/NotificationManager#deleteNotificationChannel).
-- Deleting a notification channel group will delete all the channels in the group.
-- The notification settings screen displays the number of deleted channels, as a spam prevention mechanism. You can clear test channels on development devices either by reinstalling the app or by clearing the data associated with your copy of the app.
-- After creating a notification channel, you can only update the name, description, and importance;
-- The importance of an existing channel will only be changed if the new importance is lower than the current value and the user has not altered any settings on this channel.
-  Make sure to check the Android documentation for further information.
+- **Deleting a channel is a soft delete.** Creating another channel with the same `id` un-deletes it with its old settings. The system settings screen shows the number of deleted channels as a spam-prevention measure; on development devices, clear the app's data or reinstall to reset.
+- **After creation, only name, description, and importance can change.** Importance is only ever *lowered*, and only while the user hasn't altered the channel's settings themselves.
+- **Deleting a group deletes all channels in it.**
+- **The user is in control.** Once a channel exists, the user can change its sound, importance, vibration, etc. from system settings, and your app cannot override their choices.
+- `NotificationChannelGroup.description` and `isBlocked` require Android 9 (API 28); below that the description is ignored and `isBlocked` is always `false`.
+- Many modern devices have no notification LED, in which case `lightColor` has no visible effect.
 
-## ROADMAP
+## Example app
 
-- Required features:
-  - Create notification channel(s)
-  - Create notification channel group(s)
-  - Update notification channel(s)
-  - Update notification channel group(s)
-  - Delete notification channel(s)
-  - Delete notification channel group(s)
-  - Read notification channel(s)
-  - Read notification channel group(s)
-- Dart:
-  - [x] Define classes for NotificationChannel and NotificationChannelGroup
-  - [x] Define a NotificationChannelManager class
-  - [x] Define interfaces for NotificationChannelManager to use with the Native API
-- Android:
-  - [x] Implement functionalities on Native API
-- [x] Add tests
+The [example app](example/) is a small channel-manager UI that exercises the whole API: browse channels and groups, create channels with every option, update them, and delete them. Run it with `flutter run` from `example/`.
 
-  Note: Current tests are flaky and need to be rewritten. Multiple tests are dependent on each other. A better approach would be to create a test suite for the native side, then mock it for the dart side. This will be done in the next iteration.
+## Useful links
 
-- [ ] Setup example app
-- [ ] Write documentation
+- [Notification channels (Android guide)](https://developer.android.com/develop/ui/views/notifications/channels)
+- [NotificationChannel (API reference)](https://developer.android.com/reference/android/app/NotificationChannel)
+- [NotificationChannelGroup (API reference)](https://developer.android.com/reference/android/app/NotificationChannelGroup)
+- [NotificationManager (API reference)](https://developer.android.com/reference/android/app/NotificationManager)
 
 ## Contributing
 
 This project is open source. Contributions are more than welcome!
-
-## Documentation
-
-WIP

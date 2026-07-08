@@ -33,7 +33,7 @@ final channelsWithAllFields = [
     canShowBadge: true,
     shouldShowLights: true,
     shouldVibrate: true,
-    // lightColor: LightColor.red,
+    lightColor: LightColor.red,
     sound: NotificationSoundUri.parse(
         'android.resource://com.example.app/raw/notification'),
     vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
@@ -59,7 +59,7 @@ final channelsWithAllFields = [
     canShowBadge: true,
     shouldShowLights: true,
     shouldVibrate: true,
-    // lightColor: LightColor.red,
+    lightColor: LightColor.red,
     sound: NotificationSoundUri.parse(
         'android.resource://com.example.app/raw/notification'),
     vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),

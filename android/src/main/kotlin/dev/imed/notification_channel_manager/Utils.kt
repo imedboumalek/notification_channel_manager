@@ -5,11 +5,11 @@ import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.media.AudioAttributes
 import android.net.Uri
+import android.os.Build
 
 
 @SuppressLint("NewApi")
 fun NotificationChannel.toMap(): Map<String, Any?> {
-    println("color in toMap: $lightColor")
     return mapOf(
         "id" to id,
         "name" to name,
@@ -20,8 +20,9 @@ fun NotificationChannel.toMap(): Map<String, Any?> {
         "canShowBadge" to canShowBadge(),
         "shouldShowLights" to shouldShowLights(),
         "shouldVibrate" to shouldVibrate(),
-        //  "lightColor" to lightColor,
-        "sound" to sound.toString(),
+        // mask to unsigned 32-bit so both sides compare the same positive value
+        "lightColor" to (lightColor.toLong() and 0xFFFFFFFF),
+        "sound" to sound?.toString(),
         "vibrationPattern" to vibrationPattern?.toList(),
 
         )
@@ -48,13 +49,9 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
     }
     if (map["shouldShowLights"] != null) {
         channel.enableLights(map["shouldShowLights"] as Boolean)
-        //  if (map["lightColor"] != null) {
-        //      val color = map["lightColor"] as String
-        //      println("before parsing color: $color")
-        //      val colorParsed = Color.parseColor("#FF$color")
-        //      println("after parsing color: $colorParsed")
-        //      channel.lightColor = colorParsed
-        //  }
+        if (map["lightColor"] != null) {
+            channel.lightColor = (map["lightColor"] as Number).toLong().toInt()
+        }
     }
     if (map["shouldVibrate"] != null) {
         channel.enableVibration(map["shouldVibrate"] as Boolean)
@@ -73,11 +70,13 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
 }
 
 @SuppressLint("NewApi")
-fun NotificationChannelGroup.toMap(): Map<String, Any> {
+fun NotificationChannelGroup.toMap(): Map<String, Any?> {
     return mapOf(
         "id" to id,
         "name" to name,
-        "description" to description,
+        // NotificationChannelGroup.getDescription() and isBlocked() require API 28
+        "description" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) description else null,
+        "isBlocked" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) isBlocked else false,
         "channels" to channels.map { it.toMap() }
     )
 }
@@ -90,7 +89,7 @@ fun notificationChannelGroupFromMap(map: Map<String, Any?>): NotificationChannel
         map["name"] as String,
 
         )
-    if (map["description"] != null) {
+    if (map["description"] != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         group.description = map["description"] as String
     }
     return group

@@ -1,15 +1,14 @@
 name: notification_channel_manager
 description: An Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGroups.
-version: 0.1.1+1
+version: 0.3.0+0
 homepage: https://github.com/imedboumalek/notification_channel_manager.git
 repository: https://github.com/imedboumalek/notification_channel_manager.git
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
-  flutter: ">=2.5.0"
+  sdk: ^3.12.0
+  flutter: ">=3.3.0"
 
 dependencies:
-  equatable: ^2.0.5
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
@@ -17,9 +16,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  # notification_channel_manager_example:
-  #   path: example
+  flutter_lints: ^6.0.0
   integration_test:
     sdk: flutter
 

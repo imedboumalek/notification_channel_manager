@@ -1,5 +1,12 @@
 part of "notification_channel.dart";
 
+/// Preset colors for the notification LED, matching Android's
+/// `android.graphics.Color` constants.
+///
+/// Set [NotificationChannel.lightColor] together with
+/// [NotificationChannel.shouldShowLights]. Note that many modern devices no
+/// longer have a notification LED, in which case the color has no visible
+/// effect.
 enum LightColor {
   black,
   dkGray,
@@ -14,32 +21,34 @@ enum LightColor {
   magenta,
   transparent;
 
-  String nativeValue() {
+  /// maps the current color to the corresponding ARGB value
+  /// used by the native platform (android.graphics.Color constants).
+  int nativeValue() {
     switch (this) {
       case LightColor.black:
-        return "000000";
+        return 0xFF000000;
       case LightColor.dkGray:
-        return "444444";
+        return 0xFF444444;
       case LightColor.gray:
-        return "888888";
+        return 0xFF888888;
       case LightColor.ltGray:
-        return "CCCCCC";
+        return 0xFFCCCCCC;
       case LightColor.white:
-        return "FFFFFF";
+        return 0xFFFFFFFF;
       case LightColor.red:
-        return "FF0000";
+        return 0xFFFF0000;
       case LightColor.green:
-        return "00FF00";
+        return 0xFF00FF00;
       case LightColor.blue:
-        return "0000FF";
+        return 0xFF0000FF;
       case LightColor.yellow:
-        return "FFFF00";
+        return 0xFFFFFF00;
       case LightColor.cyan:
-        return "00FFFF";
+        return 0xFF00FFFF;
       case LightColor.magenta:
-        return "FF00FF";
+        return 0xFFFF00FF;
       case LightColor.transparent:
-        return "0";
+        return 0;
     }
   }
 }
