@@ -16,10 +16,20 @@ fun NotificationChannel.toMap(): Map<String, Any?> {
         "description" to description,
         "importance" to importance,
         "groupId" to group,
+        "parentChannelId" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) parentChannelId else null,
+        "conversationId" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) conversationId else null,
         "canBypassDnd" to canBypassDnd(),
         "canShowBadge" to canShowBadge(),
         "shouldShowLights" to shouldShowLights(),
         "shouldVibrate" to shouldVibrate(),
+        "allowBubbles" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) canBubble() else false,
+        "hasUserSetImportance" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) hasUserSetImportance() else false,
+        "hasUserSetSound" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) hasUserSetSound() else false,
+        "isBlockable" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) isBlockable else false,
+        "isConversation" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) isConversation
+        else (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && conversationId != null),
+        "isImportantConversation" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) isImportantConversation else false,
+        "isDemoted" to if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) isDemoted else false,
         // mask to unsigned 32-bit so both sides compare the same positive value
         "lightColor" to (lightColor.toLong() and 0xFFFFFFFF),
         "sound" to sound?.toString(),
@@ -41,8 +51,19 @@ fun notificationChannelFromMap(map: Map<String, Any?>): NotificationChannel {
     if (map["groupId"] != null) {
         channel.group = map["groupId"] as String
     }
+    if (map["parentChannelId"] != null && map["conversationId"] != null &&
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+    ) {
+        channel.setConversationId(
+            map["parentChannelId"] as String,
+            map["conversationId"] as String,
+        )
+    }
     if (map["canBypassDnd"] != null) {
         channel.setBypassDnd(map["canBypassDnd"] as Boolean)
+    }
+    if (map["allowBubbles"] != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        channel.setAllowBubbles(map["allowBubbles"] as Boolean)
     }
     if (map["canShowBadge"] != null) {
         channel.setShowBadge(map["canShowBadge"] as Boolean)

@@ -1,8 +1,10 @@
+import 'package:notification_channel_manager/src/bubble_preference.dart';
 import 'package:notification_channel_manager/src/notification_channel_group.dart';
 
 import 'package:notification_channel_manager/src/notification_channel.dart';
 
 import 'notification_channel_manager_platform_interface.dart';
+export 'src/bubble_preference.dart';
 export 'src/notification_channel_group.dart';
 export 'src/notification_channel.dart';
 
@@ -78,8 +80,14 @@ class NotificationChannelManager {
 
   /// Returns the channel with the given [channelId], or `null` if it does
   /// not exist (or below API 26).
-  static Future<NotificationChannel?> getChannel(String channelId) {
-    return NotificationChannelManagerPlatform.instance.getChannel(channelId);
+  ///
+  /// Pass [conversationId] to look up a conversation channel; if no
+  /// conversation channel exists for that conversation, the parent channel
+  /// with id [channelId] is returned instead (Android 11+ behavior).
+  static Future<NotificationChannel?> getChannel(String channelId,
+      {String? conversationId}) {
+    return NotificationChannelManagerPlatform.instance
+        .getChannel(channelId, conversationId: conversationId);
   }
 
   /// Returns the group with the given [groupId] populated with its channels,
@@ -159,5 +167,30 @@ class NotificationChannelManager {
   /// channels that belong to a group.
   static Future<void> deleteAllGroups() {
     return NotificationChannelManagerPlatform.instance.deleteAllGroups();
+  }
+
+  /// Whether notifications of this app are allowed to bubble at all.
+  ///
+  /// Always false below Android 10 (API 29). See
+  /// [NotificationChannel.allowBubbles] for the per-channel setting.
+  static Future<bool> areBubblesAllowed() {
+    return NotificationChannelManagerPlatform.instance.areBubblesAllowed();
+  }
+
+  /// Whether bubbles are enabled system-wide on this device.
+  ///
+  /// Always false below Android 12 (API 31), where there is no system-wide
+  /// toggle.
+  static Future<bool> areBubblesEnabled() {
+    return NotificationChannelManagerPlatform.instance.areBubblesEnabled();
+  }
+
+  /// The user's app-level bubble preference from the system settings.
+  ///
+  /// On Android 10 and 11 (API 29–30), where the preference doesn't exist
+  /// yet, this is derived from [areBubblesAllowed]. Always
+  /// [BubblePreference.none] below API 29.
+  static Future<BubblePreference> getBubblePreference() {
+    return NotificationChannelManagerPlatform.instance.getBubblePreference();
   }
 }

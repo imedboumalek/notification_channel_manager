@@ -24,6 +24,74 @@ void main() {
       expect(channel.vibrationPattern, null);
     });
 
+    test("conversation and bubble fields survive a toJson/fromJson round trip",
+        () {
+      const channel = NotificationChannel(
+        id: "messages_alice",
+        name: "Alice",
+        description: "Chat messages from Alice",
+        importance: NotificationChannelImportance.high,
+        parentChannelId: "messages",
+        conversationId: "contact_alice",
+        canBypassDnd: true,
+        allowBubbles: true,
+      );
+      final decoded = NotificationChannel.fromJson(channel.toJson());
+      expect(decoded.parentChannelId, "messages");
+      expect(decoded.conversationId, "contact_alice");
+      expect(decoded.canBypassDnd, true);
+      expect(decoded.allowBubbles, true);
+      expect(decoded, equals(channel));
+    });
+
+    test("parentChannelId and conversationId must be set together", () {
+      expect(
+        () => NotificationChannel(
+          id: "id",
+          name: "name",
+          description: "description",
+          importance: NotificationChannelImportance.high,
+          parentChannelId: "messages",
+        ),
+        throwsAssertionError,
+      );
+      expect(
+        () => NotificationChannel(
+          id: "id",
+          name: "name",
+          description: "description",
+          importance: NotificationChannelImportance.high,
+          conversationId: "contact_alice",
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test("read-only state fields parse from json", () {
+      final json = {
+        'id': 'id',
+        'name': 'name',
+        'description': 'description',
+        'importance': NotificationChannelImportance.high.nativeValue(),
+        'canShowBadge': true,
+        'shouldShowLights': false,
+        'shouldVibrate': false,
+        'hasUserSetImportance': true,
+        'hasUserSetSound': true,
+        'isBlockable': true,
+        'isConversation': true,
+        'isImportantConversation': true,
+        'isDemoted': true,
+      };
+      final channel = NotificationChannel.fromJson(json);
+      expect(channel.hasUserSetImportance, true);
+      expect(channel.hasUserSetSound, true);
+      expect(channel.isBlockable, true);
+      expect(channel.isConversation, true);
+      expect(channel.isImportantConversation, true);
+      expect(channel.isDemoted, true);
+    });
+
     test("lightColor should survive a toJson/fromJson round trip", () {
       const channel = NotificationChannel(
         id: "id",

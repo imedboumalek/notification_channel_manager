@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:notification_channel_manager/src/bubble_preference.dart';
 import 'package:notification_channel_manager/src/notification_channel_group.dart';
 import 'package:notification_channel_manager/src/notification_channel.dart';
 
@@ -21,8 +22,12 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   }
 
   @override
-  Future<NotificationChannel?> getChannel(String channelId) async {
-    final result = await methodChannel.invokeMethod<Map<dynamic, dynamic>>('getChannel', channelId);
+  Future<NotificationChannel?> getChannel(String channelId,
+      {String? conversationId}) async {
+    final result = await methodChannel.invokeMethod<Map<dynamic, dynamic>>(
+      'getChannel',
+      {'id': channelId, 'conversationId': conversationId},
+    );
     if (result == null) return null;
     final map = Map<String, dynamic>.from(result);
     return NotificationChannel.fromJson(map);
@@ -147,5 +152,24 @@ class MethodChannelNotificationChannelManager implements NotificationChannelMana
   @override
   Future<void> deleteAllGroups() {
     return methodChannel.invokeMethod('deleteAllGroups');
+  }
+
+  @override
+  Future<bool> areBubblesAllowed() async {
+    return await methodChannel.invokeMethod<bool>('areBubblesAllowed') ??
+        false;
+  }
+
+  @override
+  Future<bool> areBubblesEnabled() async {
+    return await methodChannel.invokeMethod<bool>('areBubblesEnabled') ??
+        false;
+  }
+
+  @override
+  Future<BubblePreference> getBubblePreference() async {
+    final value =
+        await methodChannel.invokeMethod<int>('getBubblePreference') ?? 0;
+    return BubblePreference.fromNativeValue(value);
   }
 }

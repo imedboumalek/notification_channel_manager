@@ -79,6 +79,34 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
           ),
           ListTile(
             dense: true,
+            title: const Text('Bypasses Do Not Disturb'),
+            trailing: Text(channel.canBypassDnd ? 'yes' : 'no'),
+          ),
+          if (channel.isConversation)
+            ListTile(
+              dense: true,
+              title: const Text('Conversation'),
+              trailing: Text(
+                  '${channel.parentChannelId} · ${channel.conversationId}'
+                  '${channel.isImportantConversation ? ' · important' : ''}'
+                  '${channel.isDemoted ? ' · demoted' : ''}'),
+            ),
+          ListTile(
+            dense: true,
+            title: const Text('Bubbles'),
+            trailing: Text(channel.allowBubbles ? 'allowed' : 'off'),
+          ),
+          if (channel.hasUserSetImportance || channel.hasUserSetSound)
+            ListTile(
+              dense: true,
+              title: const Text('Changed by user'),
+              trailing: Text([
+                if (channel.hasUserSetImportance) 'importance',
+                if (channel.hasUserSetSound) 'sound',
+              ].join(', ')),
+            ),
+          ListTile(
+            dense: true,
             title: const Text('Sound'),
             trailing: SizedBox(
               width: 200,

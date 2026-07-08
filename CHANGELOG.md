@@ -1,3 +1,10 @@
+## (0.4.0+0)
+
+- added conversation channel support (API 30+): parentChannelId/conversationId on NotificationChannel, conversation-aware getChannel lookup, and isConversation/isImportantConversation/isDemoted state
+- added bubble support (API 29+): allowBubbles on NotificationChannel, plus areBubblesAllowed, areBubblesEnabled, and getBubblePreference
+- exposed canBypassDnd on NotificationChannel
+- added read-only channel state: hasUserSetImportance, hasUserSetSound, isBlockable
+
 ## (0.3.0+0)
 
 - **BREAKING**: renamed `deleteMutliChannels` to `deleteMultiChannels`

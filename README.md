@@ -66,6 +66,44 @@ final groups = await NotificationChannelManager.getAllGroups();
 await NotificationChannelManager.deleteGroup('calls');
 ```
 
+### Conversation channels (Android 11+)
+
+Conversation channels give users per-conversation notification settings (e.g. per contact in a messaging app). Create the parent channel first, then a channel with `parentChannelId` and `conversationId` set:
+
+```dart
+await NotificationChannelManager.createChannel(const NotificationChannel(
+  id: 'messages_alice',
+  name: 'Alice',
+  description: 'Messages from Alice',
+  importance: NotificationChannelImportance.high,
+  parentChannelId: 'messages',       // must exist
+  conversationId: 'contact_alice',   // typically your shortcut id
+));
+
+// Conversation-aware lookup; falls back to the parent channel if no
+// conversation channel exists for that id:
+final channel = await NotificationChannelManager.getChannel(
+  'messages',
+  conversationId: 'contact_alice',
+);
+```
+
+Read-only fields tell you what the user did with it: `isConversation`, `isImportantConversation`, `isDemoted` (user turned it back into a regular channel). Below Android 11 the channel is created as a regular channel.
+
+### Bubbles and channel state (Android 10+)
+
+```dart
+// Per-channel opt-in (only honored once the user allows bubbles for the app):
+NotificationChannel(..., allowBubbles: true)
+
+// App-level bubble state:
+final allowed = await NotificationChannelManager.areBubblesAllowed();    // API 29+
+final enabled = await NotificationChannelManager.areBubblesEnabled();    // API 31+
+final preference = await NotificationChannelManager.getBubblePreference(); // none/all/selected
+```
+
+Channels also read back user-interaction state: `hasUserSetImportance` and `hasUserSetSound` tell you when an update to those fields would be ignored, and `canBypassDnd` lets a channel bypass Do Not Disturb.
+
 ### Read, update, delete
 
 ```dart

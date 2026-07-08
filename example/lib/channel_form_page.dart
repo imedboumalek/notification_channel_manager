@@ -25,6 +25,7 @@ class _ChannelFormPageState extends State<ChannelFormPage> {
   var shouldShowLights = false;
   var lightColor = LightColor.white;
   var shouldVibrate = false;
+  var canBypassDnd = false;
 
   @override
   void dispose() {
@@ -47,6 +48,7 @@ class _ChannelFormPageState extends State<ChannelFormPage> {
         shouldShowLights: shouldShowLights,
         lightColor: shouldShowLights ? lightColor : null,
         shouldVibrate: shouldVibrate,
+        canBypassDnd: canBypassDnd,
       ));
       if (!mounted) return;
       Navigator.pop(context, true);
@@ -133,6 +135,12 @@ class _ChannelFormPageState extends State<ChannelFormPage> {
               title: const Text('Vibrate'),
               value: shouldVibrate,
               onChanged: (value) => setState(() => shouldVibrate = value),
+            ),
+            SwitchListTile(
+              title: const Text('Bypass Do Not Disturb'),
+              subtitle: const Text('May require DND access'),
+              value: canBypassDnd,
+              onChanged: (value) => setState(() => canBypassDnd = value),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
