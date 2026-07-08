@@ -84,12 +84,8 @@ class NotificationChannel {
       canShowBadge: json['canShowBadge'] as bool,
       shouldShowLights: json['shouldShowLights'] as bool,
       shouldVibrate: json['shouldVibrate'] as bool,
-      lightColor: json['shouldShowLights'] == true && json['lightColor'] != null
-          ? LightColor.values.firstWhere(
-              // mask to unsigned 32-bit: the native side sends a signed Int
-              (e) => e.nativeValue() == (json['lightColor'] as int) & 0xFFFFFFFF,
-              orElse: () => LightColor.transparent,
-            )
+      lightColor: json['shouldShowLights'] == true
+          ? _lightColorFromNative(json['lightColor'] as int?)
           : null,
       sound: json['sound'] == null
           ? null
@@ -99,6 +95,19 @@ class NotificationChannel {
           : Uint64List.fromList((json['vibrationPattern'] as List).map((e) => e as int).toList()),
     );
   }
+  /// Android reports 0 when no light color was set; unknown custom colors
+  /// can't be represented by the [LightColor] presets, so both read as null.
+  static LightColor? _lightColorFromNative(int? nativeValue) {
+    if (nativeValue == null) return null;
+    // mask to unsigned 32-bit: the native side sends a signed Int
+    final masked = nativeValue & 0xFFFFFFFF;
+    if (masked == 0) return null;
+    for (final color in LightColor.values) {
+      if (color.nativeValue() == masked) return color;
+    }
+    return null;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

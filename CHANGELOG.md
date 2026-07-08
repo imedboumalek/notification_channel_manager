@@ -3,8 +3,9 @@
 - updated all dependencies: Dart 3 (sdk ^3.12.0), flutter_lints 6, AGP 9.0 / Kotlin 2.3 / Gradle 9.1 (Kotlin DSL)
 - removed the equatable dependency; the plugin now depends only on Flutter and plugin_platform_interface
 - raised Android minSdk from 16 to 24 (current Flutter minimum)
-- rewrote the example app as a self-contained demo of the plugin (dropped custom_floating_action_button)
+- rewrote the example app as a self-contained, full-featured demo: create channels with all options (importance, group, badge, lights + color, vibration), update channels, manage groups
 - example app package moved to dev.imed.notification_channel_manager_example
+- lightColor now reads back as null when Android reports no color set (0) or an unknown custom color
 
 ## (0.2.0+0)
 

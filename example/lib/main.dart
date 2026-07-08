@@ -1,35 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:notification_channel_manager/notification_channel_manager.dart';
 
+import 'channel_detail_page.dart';
+import 'channel_form_page.dart';
+import 'group_form_page.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const ExampleApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ExampleApp extends StatelessWidget {
+  const ExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: ChannelListPage());
+    return MaterialApp(
+      title: 'Notification Channel Manager',
+      theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
+      home: const HomePage(),
+    );
   }
 }
 
-class ChannelListPage extends StatefulWidget {
-  const ChannelListPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<ChannelListPage> createState() => _ChannelListPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _ChannelListPageState extends State<ChannelListPage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
   List<NotificationChannel> channels = [];
   List<NotificationChannelGroup> groups = [];
-  int counter = 0;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    // rebuild so the FAB matches the active tab
+    _tabController.addListener(() => setState(() {}));
     _refresh();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   Future<void> _refresh() async {
@@ -42,107 +60,209 @@ class _ChannelListPageState extends State<ChannelListPage> {
     });
   }
 
-  Future<void> _createChannel() async {
-    counter++;
-    await NotificationChannelManager.createChannel(NotificationChannel(
-      id: 'channel_$counter',
-      name: 'Channel $counter',
-      description: 'Created from the example app',
-      importance: NotificationChannelImportance.high,
-    ));
+  Future<void> _deleteAll() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete everything?'),
+        content: const Text(
+            'This deletes all notification channels and groups of this app. '
+            'Android soft-deletes channels: recreating one with the same id '
+            'restores its old settings.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete all'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    await NotificationChannelManager.deleteAllChannels();
+    await NotificationChannelManager.deleteAllGroups();
     await _refresh();
   }
 
-  Future<void> _createGroup() async {
-    counter++;
-    await NotificationChannelManager.upsertGroup(NotificationChannelGroup(
-      id: 'group_$counter',
-      name: 'Group $counter',
-      description: 'Created from the example app',
-    ));
-    await _refresh();
+  Future<void> _openChannelForm() async {
+    final created = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => ChannelFormPage(groups: groups)),
+    );
+    if (created == true) await _refresh();
+  }
+
+  Future<void> _openGroupForm() async {
+    final created = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const GroupFormPage()),
+    );
+    if (created == true) await _refresh();
+  }
+
+  Future<void> _openChannelDetail(NotificationChannel channel) async {
+    final changed = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => ChannelDetailPage(channel: channel)),
+    );
+    if (changed == true) await _refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notification Channel Manager'),
+        title: const Text('Channel Manager'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Refresh',
+            onPressed: _refresh,
+          ),
+          IconButton(
             icon: const Icon(Icons.delete_sweep),
-            tooltip: 'Delete all channels and groups',
-            onPressed: () async {
-              await NotificationChannelManager.deleteAllChannels();
-              await NotificationChannelManager.deleteAllGroups();
-              await _refresh();
-            },
+            tooltip: 'Delete all',
+            onPressed: _deleteAll,
           ),
         ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: ListView(
-          children: [
-            if (groups.isNotEmpty)
-              const ListTile(
-                title: Text('Groups',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            for (final group in groups)
-              ListTile(
-                leading: const Icon(Icons.folder),
-                title: Text(group.name),
-                subtitle:
-                    Text('${group.id} · ${group.channels.length} channel(s)'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () async {
-                    await NotificationChannelManager.deleteGroup(group.id);
-                    await _refresh();
-                  },
-                ),
-              ),
-            if (channels.isNotEmpty)
-              const ListTile(
-                title: Text('Channels',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            for (final channel in channels)
-              ListTile(
-                leading: const Icon(Icons.notifications),
-                title: Text(channel.name),
-                subtitle: Text('${channel.id} · ${channel.importance.name}'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () async {
-                    await NotificationChannelManager.deleteChannel(channel.id);
-                    await _refresh();
-                  },
-                ),
-              ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Channels (${channels.length})'),
+            Tab(text: 'Groups (${groups.length})'),
           ],
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      body: TabBarView(
+        controller: _tabController,
         children: [
-          FloatingActionButton.extended(
-            heroTag: 'group',
-            onPressed: _createGroup,
-            icon: const Icon(Icons.create_new_folder),
-            label: const Text('Group'),
+          _ChannelsTab(
+            channels: channels,
+            onRefresh: _refresh,
+            onTap: _openChannelDetail,
           ),
-          const SizedBox(height: 12),
-          FloatingActionButton.extended(
-            heroTag: 'channel',
-            onPressed: _createChannel,
-            icon: const Icon(Icons.add_alert),
-            label: const Text('Channel'),
-          ),
+          _GroupsTab(groups: groups, onRefresh: _refresh),
         ],
       ),
+      floatingActionButton: _tabController.index == 0
+          ? FloatingActionButton.extended(
+              onPressed: _openChannelForm,
+              icon: const Icon(Icons.add_alert),
+              label: const Text('Channel'),
+            )
+          : FloatingActionButton.extended(
+              onPressed: _openGroupForm,
+              icon: const Icon(Icons.create_new_folder),
+              label: const Text('Group'),
+            ),
+    );
+  }
+}
+
+class _ChannelsTab extends StatelessWidget {
+  const _ChannelsTab({
+    required this.channels,
+    required this.onRefresh,
+    required this.onTap,
+  });
+
+  final List<NotificationChannel> channels;
+  final Future<void> Function() onRefresh;
+  final void Function(NotificationChannel) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: channels.isEmpty
+          ? ListView(
+              children: const [
+                SizedBox(height: 120),
+                Center(child: Text('No channels yet.\nCreate one below.')),
+              ],
+            )
+          : ListView.builder(
+              itemCount: channels.length,
+              itemBuilder: (context, index) {
+                final channel = channels[index];
+                return ListTile(
+                  leading: const Icon(Icons.notifications),
+                  title: Text(channel.name),
+                  subtitle: Text(
+                      '${channel.id} · ${channel.importance.name}'
+                      '${channel.groupId != null ? ' · in ${channel.groupId}' : ''}'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    tooltip: 'Delete channel',
+                    onPressed: () async {
+                      await NotificationChannelManager.deleteChannel(
+                          channel.id);
+                      await onRefresh();
+                    },
+                  ),
+                  onTap: () => onTap(channel),
+                );
+              },
+            ),
+    );
+  }
+}
+
+class _GroupsTab extends StatelessWidget {
+  const _GroupsTab({required this.groups, required this.onRefresh});
+
+  final List<NotificationChannelGroup> groups;
+  final Future<void> Function() onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: groups.isEmpty
+          ? ListView(
+              children: const [
+                SizedBox(height: 120),
+                Center(child: Text('No groups yet.\nCreate one below.')),
+              ],
+            )
+          : ListView.builder(
+              itemCount: groups.length,
+              itemBuilder: (context, index) {
+                final group = groups[index];
+                return ExpansionTile(
+                  leading: const Icon(Icons.folder),
+                  title: Text(group.name),
+                  subtitle: Text(
+                      '${group.id} · ${group.channels.length} channel(s)'
+                      '${group.isBlocked ? ' · blocked' : ''}'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    tooltip: 'Delete group and its channels',
+                    onPressed: () async {
+                      await NotificationChannelManager.deleteGroup(group.id);
+                      await onRefresh();
+                    },
+                  ),
+                  children: [
+                    if (group.description.isNotEmpty)
+                      ListTile(
+                        dense: true,
+                        title: Text(group.description),
+                      ),
+                    for (final channel in group.channels)
+                      ListTile(
+                        dense: true,
+                        leading: const Icon(Icons.notifications, size: 20),
+                        title: Text(channel.name),
+                        subtitle: Text(channel.id),
+                      ),
+                  ],
+                );
+              },
+            ),
     );
   }
 }

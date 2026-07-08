@@ -43,7 +43,7 @@ A Android plugin to Manage (CRUD) NotificationChannels and NotificationChannelGr
 
   Note: Current tests are flaky and need to be rewritten. Multiple tests are dependent on each other. A better approach would be to create a test suite for the native side, then mock it for the dart side. This will be done in the next iteration.
 
-- [ ] Setup example app
+- [x] Setup example app
 - [ ] Write documentation
 
 ## Contributing

@@ -53,6 +53,20 @@ void main() {
       expect(NotificationChannel.fromJson(json).lightColor, LightColor.red);
     });
 
+    test("lightColor should be null when Android reports no color (0)", () {
+      final json = {
+        'id': 'id',
+        'name': 'name',
+        'description': 'description',
+        'importance': NotificationChannelImportance.high.nativeValue(),
+        'canShowBadge': true,
+        'shouldShowLights': true,
+        'shouldVibrate': false,
+        'lightColor': 0,
+      };
+      expect(NotificationChannel.fromJson(json).lightColor, null);
+    });
+
     test("lightColor should be null when lights are disabled", () {
       final json = {
         'id': 'id',

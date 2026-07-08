@@ -89,7 +89,7 @@ void main() {
       canShowBadge: true,
       shouldShowLights: true,
       shouldVibrate: true,
-      // lightColor: LightColor.red,
+      lightColor: LightColor.red,
       sound: RawNotificationSound(fileName: "sound.mp3", packageName: "dev.imed.example"),
 
       vibrationPattern: Uint64List.fromList([0, 1000, 500, 1000]),
@@ -113,7 +113,7 @@ void main() {
       expect(result.canShowBadge, true);
       expect(result.shouldShowLights, false);
       expect(result.shouldVibrate, false);
-      // expect(result.lightColor, null);
+      expect(result.lightColor, null);
       expect(result.sound, isA<NotificationSoundUri>());
       expect(result.sound.toString(), "content://settings/system/notification_sound",
           reason: "Default android notification sound");
