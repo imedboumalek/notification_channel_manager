@@ -1,3 +1,7 @@
+## (0.4.1+0)
+
+- linked the pub.dev page to the GitHub repository and added topics (notifications, android, notification-channels) for discoverability
+
 ## (0.4.0+0)
 
 - added conversation channel support (API 30+): parentChannelId/conversationId on NotificationChannel, conversation-aware getChannel lookup, and isConversation/isImportantConversation/isDemoted state
